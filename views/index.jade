@@ -1,0 +1,30 @@
+extends layout
+
+block title
+    title Purdue Class Watcher
+
+block content
+        //-div.col-sm-12
+            //-p Welcome to #{title}
+        div.col-sm-6.col-sm-offset-3
+            h1 Purdue Class Watcher
+            if messages.success
+                .alert.alert-success!= messages.success
+            if messages.error
+                .alert.alert-danger= messages.error
+            if messages.info
+                .alert.alert-info= messages.info
+            include validationErrors
+            p Enter your email address and a CRN, and you will be emailed when there is space available in the section.
+            form(method='POST')
+                div.form-group
+                    label(for='emailAddress') Email Address:
+                    input(type='email' name='email' value=user ? user.email :'' placeholder='Email Address' autofocus=user&&user.email!='' ? false : true autocomplete=true).form-control#emailAddress
+                .form-group
+                    label(for='crnInput') CRN:
+                    input(type='number' name='crn' placeholder='CRN' autofocus=user&&user.email!='' ? true : false).form-control#crnInput
+                .form-group
+                    label(for='term') Term:
+                    select(name='term' required).form-control#term
+                        option(value=201720) Spring 2017
+                button(type='submit').btn.btn-primary.btn-block Submit

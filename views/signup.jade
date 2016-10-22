@@ -1,0 +1,22 @@
+extends layout
+
+block title
+    title Sign Up
+
+block content
+    div.col-sm-6.col-sm-offset-3
+        h1 Create An Account
+        if messages.error
+            .alert.alert-danger= messages.error
+        if validationErrors
+            .alert.alert-danger
+                each error in validationErrors
+                    p= error.msg
+        form(method='POST')
+            .form-group
+                label(for='email') Email Address:
+                input(autofocus=true).form-control#email&attributes({'type':'email','placeholder':'Email Address','name':'email'})
+            .form-group
+                label(for = 'password') Password
+                input.form-control#password(type='password',placeholder='Password',name='password')
+            button(type='submit').btn.btn-block.btn-success Register
