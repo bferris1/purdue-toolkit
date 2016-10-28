@@ -1,8 +1,11 @@
-var sendgrid  = require('sendgrid')('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');
+var credentials = require('./credentials');
+var sendgrid  = require('sendgrid')(credentials.sendgrid.key);
 var request = require('request');
 var cheerio = require('cheerio');
 var Watch = require('./models/watch');
 var checker = {};
+
+//TODO: consolidate email sending to use email-sender?
 
 
 checker.getSection = function(term, crn, callback){

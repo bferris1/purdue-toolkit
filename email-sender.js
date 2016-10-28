@@ -1,4 +1,5 @@
-var sendgrid  = require('sendgrid')('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');
+var credentials = require('./credentials');
+var sendgrid  = require('sendgrid')(credentials.sendgrid.key);
 var emailSender = {};
 var test = {
     sendEmail: function (message) {

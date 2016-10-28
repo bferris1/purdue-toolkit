@@ -1,10 +1,11 @@
-var sendgrid  = require('sendgrid')('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');
+var credentials = require('./credentials');
+var sendgrid  = require('sendgrid')(credentials.sendgrid.key);
 var request = require('request');
 var cheerio = require('cheerio');
 var mongoose = require('mongoose');
 var async = require('async');
 var emailSender = require('./email-sender');
-mongoose.connect('mongodb://moufbear:nacre-means-scion@ds021922.mlab.com:21922/purdue-toolkit');
+mongoose.connect(credentials.db.url);
 var Watch = require('./models/watch');
 
 // If the Node process ends, close the Mongoose connection
@@ -71,7 +72,6 @@ var checkWatches = function () {
     });
 };
 
-emailSender.sendNotificationEmail("CS 12345", 'ben.ferris1@gmail.com', '201710', '12345');
 checkWatches();
 
 

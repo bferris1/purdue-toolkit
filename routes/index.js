@@ -5,8 +5,11 @@ var Watch = require('../models/watch');
 var passport = require('passport');
 var crypto = require('crypto');
 var validator = require('validator');
-var sendgrid  = require('sendgrid')('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');
+var credentials = require('../credentials');
+var sendgrid  = require('sendgrid')(credentials.sendgrid.key);
 var checker = require('../checker');
+var applicationURL = process.env.URL || 'http://localhost:3000';
+//TODO: include application url in configuration, possibly use env vars
 
 //always include the user object when rendering views
 router.use(function(req, res, next){
@@ -190,12 +193,12 @@ router.post('/forgot',function (req, res) {
                                 from:'notifications@putoolkit.xyz',
                                 subject:'Class Watcher Password Reset',
                                 html:'this will be replaced by the template',
-                                text:'https://radiant-river-59674.herokuapp.com/reset/'+buff.toString('hex')
+                                text:applicationURL + '/reset/' + buff.toString('hex')
                             });
                             // add filter settings one at a time
                             email.addFilter('templates', 'enable', 1);
                             email.addFilter('templates', 'template_id', 'ad392fc9-55b7-4fef-9bae-3288156aec58');
-                            email.addSubstitution('-resetURL-','https://radiant-river-59674.herokuapp.com/reset/'+buff.toString('hex'));
+                            email.addSubstitution('-resetURL-',applicationURL + '/reset/'+buff.toString('hex'));
                             sendgrid.send(email,function (err, json) {
                                 if(err) {
                                     console.log(err);
