@@ -22,7 +22,7 @@ UserSchema.pre('save',function (next) {
     if (!user.isModified('password'))
         return next();
 
-    bcrypt.hash(user.password,10,function(err, hash){
+    bcrypt.hash(user.password,10, null, function(err, hash){
         user.password = hash;
         next();
     })
