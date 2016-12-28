@@ -10,6 +10,7 @@ var User = require('./models/user');
 var password = 'nacre-means-scion';
 var mongoose = require('mongoose');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var flash = require('express-flash');
 var helmet = require('helmet');
 var expressValidator = require('express-validator');
@@ -61,6 +62,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
     secret: credentials.session.secret,
+    store: new MongoStore({mongooseConnection:mongoose.connection}),
     name: credentials.session.name,
     saveUninitialized:false,
     resave:false,
