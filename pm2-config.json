@@ -4,6 +4,7 @@
       "name"        : "Purdue Toolkit",
       "script"      : "./bin/www",
       "watch"       : true,
+      "watch_ignore": ["node_modules", "public"],
       "env": {
         "NODE_ENV": "development",
         "URL":"https://puclass.space",
