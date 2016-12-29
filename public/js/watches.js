@@ -5,8 +5,8 @@ angular.module('WatchesPage',[])
     var watchList = this;
 
     function refreshLists(){
-        $http.get('/api/watches').success(function (data) {
-            watchList.watches = data;
+        $http.get('/api/watches').then(function onSuccess(response) {
+            watchList.watches = response.data;
         });
     }
     refreshLists();
@@ -14,7 +14,7 @@ angular.module('WatchesPage',[])
 
 
     watchList.deleteWatch = function (id) {
-        $http.delete('/api/watches/'+id).success(function(data){
+        $http.delete('/api/watches/'+id).then(function onSuccess(response){
             refreshLists();
         })
     }
