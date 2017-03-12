@@ -19,7 +19,7 @@ block content
             form(method='POST')
                 div.form-group
                     label(for='emailAddress') Email Address:
-                    input(type='email' name='email' value=user ? user.email :'' placeholder='Email Address' autofocus=user&&user.email!='' ? false : true autocomplete=true).form-control#emailAddress
+                    input(type='email' name='email' value=user ? user.email :'' placeholder='Email Address' autofocus=!(user && user.email != '') autocomplete=true).form-control#emailAddress
                 .form-group
                     label(for='crnInput') CRN:
                     input(type='number' name='crn' placeholder='CRN' autofocus=user&&user.email!='' ? true : false).form-control#crnInput
