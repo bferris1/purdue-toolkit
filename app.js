@@ -15,7 +15,7 @@ var flash = require('express-flash');
 var helmet = require('helmet');
 var expressValidator = require('express-validator');
 var checker = require('./checker');
-var credentials = require('./credentials');
+var credentials = require('./credentials.json');
 mongoose.Promise = global.Promise;
 mongoose.connect(credentials.db.url);
 

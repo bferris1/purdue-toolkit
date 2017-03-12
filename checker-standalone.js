@@ -1,4 +1,4 @@
-var credentials = require('./credentials');
+var credentials = require('./credentials.json');
 var sendgrid  = require('sendgrid')(credentials.sendgrid.key);
 var request = require('request');
 var cheerio = require('cheerio');

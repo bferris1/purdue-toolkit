@@ -3,7 +3,7 @@ var router = express.Router();
 var User = require('../models/user');
 var Watch = require('../models/watch');
 var jwt = require('jsonwebtoken');
-var credentials = require('../credentials');
+var credentials = require('../credentials.json');
 
 
 
