@@ -1,0 +1,24 @@
+extends layout
+//-This page allows a logged-in user to view and manage their current watches
+block title
+    title Manage Watches
+
+block extraScript
+    script(src='/bower_components/jquery/dist/jquery.min.js')
+    script(src='/bower_components/angular/angular.min.js')
+    script(src='/js/watches.js')
+
+block content
+    .col-sm-6.col-sm-offset-3
+        h1 Manage Watches
+        include validationErrors
+        div(ng-app='WatchesPage' ng-cloak ng-controller='watchListCtrl as watchesList')
+            p(ng-if='watchesList.watches==0') You have no watches.
+            div.panel(ng-repeat='watch in watchesList.watches' ng-class="{'panel-primary' : watch.isActive, 'panel-success':!watch.isActive}")
+                .panel-heading
+                    h3.panel-title {{watch.courseNumber}} - {{watch.termFriendly}} <span class='pull-right'>Section {{watch.sectionNumber}}</span>
+                .panel-body
+                    p {{watch.courseTitle}}
+                    p.text-success(ng-if='!watch.isActive') Notification Sent - Not Active
+                    button.btn.btn-danger(ng-click='watchesList.deleteWatch(watch._id)') Delete
+                    button.btn.btn-danger Delete
