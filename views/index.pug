@@ -4,8 +4,6 @@ block title
     title Purdue Class Watcher
 
 block content
-        //-div.col-sm-12
-            //-p Welcome to #{title}
         div.col-sm-6.col-sm-offset-3
             h1 Purdue Class Watcher
             if messages.success
@@ -22,7 +20,7 @@ block content
                     input(type='email' name='email' value=user ? user.email :'' placeholder='Email Address' autofocus=!(user && user.email != '') autocomplete=true).form-control#emailAddress
                 .form-group
                     label(for='crnInput') CRN:
-                    input(type='number' name='crn' placeholder='CRN' autofocus=user&&user.email!='' ? true : false).form-control#crnInput
+                    input(type='number' name='crn' placeholder='CRN' autofocus=user && user.email != '').form-control#crnInput
                 .form-group
                     label(for='term') Term:
                     select(name='term' required).form-control#term
