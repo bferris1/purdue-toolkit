@@ -1,3 +1,4 @@
+'use strict';
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
@@ -96,7 +97,7 @@ router.post('/account', function (req, res) {
         res.render('account',{validationErrors:req.validationErrors()});
     }else{
         if(req.user){
-            var user = req.user;
+            let user = req.user;
             console.log('Email:'+req.body.email);
             if(req.body.firstName)
                 user.firstName = req.body.firstName;
@@ -106,6 +107,9 @@ router.post('/account', function (req, res) {
                 user.email = req.body.email;
             if(req.body.password)
                 user.password = req.body.password;
+            if(req.body.pushoverKey){
+                user.pushoverKey = req.body.pushoverKey;
+            }
             user.save(function (err, user) {
                 if(!err){
                     req.flash('success','Account updated.');
