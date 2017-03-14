@@ -1,12 +1,8 @@
 var credentials = require('./credentials.json');
 var sendgrid  = require('sendgrid')(credentials.sendgrid.key);
 var emailSender = {};
-var test = {
-    sendEmail: function (message) {
-        console.log(message);
-    }
-};
 
+//todo: error handling
 emailSender.sendNotificationEmail = function (courseName, emailAddress, term, crn) {
     var email = new sendgrid.Email({
         to:emailAddress,
@@ -26,7 +22,6 @@ emailSender.testMail = function (emailAddress) {
         subject:'Testing SetInterval',
         text:'This message tests the email sending functionality.'
     });
-    test.sendEmail('hello');
     sendgrid.send(email);
 };
 

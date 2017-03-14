@@ -21,8 +21,6 @@ WatchSchema.pre('save',function (next) {
     //converts the term number to a human-friendly semester name and year
     var year = this.term.toString().substring(0,4);
     var semesterNumber = this.term.toString().substring(4);
-    console.log(year);
-    console.log(semesterNumber);
     var semesterString;
     switch (semesterNumber){
         case "10":
@@ -38,7 +36,6 @@ WatchSchema.pre('save',function (next) {
 
     }
     this.termFriendly = semesterString + " " + year;
-    console.log(this.termFriendly);
     next();
 
 });

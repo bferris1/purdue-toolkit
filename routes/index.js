@@ -24,8 +24,8 @@ router.get('/', function(req, res, next) {
 });
 
 //post to home page to create a new watch
+//todo: better string formatting
 router.post('/',function (req, res) {
-    //todo:verify input
     req.check('email', 'Email address is required.').notEmpty();
     req.check('email', 'Email address is not valid.').isEmail();
     req.check('crn', 'CRN is required.').notEmpty();
