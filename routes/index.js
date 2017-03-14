@@ -10,7 +10,6 @@ var credentials = require('../credentials.json');
 var sendgrid  = require('sendgrid')(credentials.sendgrid.key);
 var checker = require('../checker');
 var applicationURL = process.env.URL || 'http://localhost:3000';
-//TODO: include application url in configuration, possibly use env vars
 
 //always include the user object when rendering views
 router.use(function(req, res, next){
@@ -23,6 +22,8 @@ router.use(function(req, res, next){
 router.get('/', function(req, res, next) {
   res.render('index');
 });
+
+//post to home page to create a new watch
 router.post('/',function (req, res) {
     //todo:verify input
     req.check('email', 'Email address is required.').notEmpty();
@@ -109,6 +110,8 @@ router.post('/account', function (req, res) {
                 user.password = req.body.password;
             if(req.body.pushoverKey){
                 user.pushoverKey = req.body.pushoverKey;
+            }else {
+                user.pushoverKey = null;
             }
             user.save(function (err, user) {
                 if(!err){

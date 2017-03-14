@@ -16,7 +16,7 @@ var helmet = require('helmet');
 var expressValidator = require('express-validator');
 var checker = require('./checker');
 var credentials = require('./credentials.json');
-mongoose.Promise = global.Promise;
+mongoose.Promise = require('bluebird');
 mongoose.connect(credentials.db.url);
 
 var routes = require('./routes/index');
