@@ -4,6 +4,7 @@ var sendgrid  = require('sendgrid')(credentials.sendgrid.key);
 var request = require('request');
 var cheerio = require('cheerio');
 var mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
 var async = require('async');
 var checker = require('./checker');
 var emailSender = require('./email-sender');
@@ -22,7 +23,7 @@ process.on('SIGINT', function() {
 });
 
 var checkWatches = function () {
-    Watch.find({isActive:true}, function (err, watches) {
+    Watch.find({isActive:true}).populate('user').exec(function (err, watches) {
         if(err)
             return err;
         else{
@@ -31,16 +32,14 @@ var checkWatches = function () {
                 console.log(watch._id);
                 checker.getSection(watch.term, watch.crn, function (err, section) {
                     if(!err&&section&&section.availableSeats>0){
-                        if(watch.userID != null) {
-                            let watchUser = User.findById(watch.userID);
-                            if(watchUser.pushoverKey != null){
-                                push.send(watchUser.pushoverKey, "Class Available", section.title + " is available!")
-                            }
+                        if(watch.user && watch.user.pushoverKey){
+                            push.send(watch.user.pushoverKey, "Class Available: "+watch.title, watch.title+" is now available.")
                         }
                         emailSender.sendNotificationEmail(section.title,watch.email,watch.term,watch.crn);
                         watch.isActive = false;
+                        watch.resolvedDate = Date.now();
                         watch.save(function (err, watch) {
-                            console.log(watch);
+                            // console.log(watch);
                             cb(err);
                         })
                     }else{

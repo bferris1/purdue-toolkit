@@ -86,7 +86,7 @@ router.get('/', function (req, res) {
 });
 
 router.get('/watches',function (req, res) {
-    Watch.find({email:req.decoded.email},function (err, watches) {
+    Watch.find({$or: [ { email: req.decoded.email }, { user:req.decoded.id } ]},function (err, watches) {
         if(err)
             res.json({success:false,message:err.message});
         else

@@ -16,8 +16,9 @@ block content
             p(ng-if='watchesList.watches==0') You have no watches.
             div.panel(ng-repeat='watch in watchesList.watches' ng-class="{'panel-primary' : watch.isActive, 'panel-success':!watch.isActive}")
                 .panel-heading
-                    h3.panel-title {{watch.courseNumber}} - {{watch.termFriendly}} <span class='pull-right'>Section {{watch.sectionNumber}}</span>
+                    h3.panel-title {{watch.courseNumber}} - {{watch.courseTitle}} - {{watch.termFriendly}} <span class='pull-right'>Section {{watch.sectionNumber}}</span>
                 .panel-body
-                    p {{watch.courseTitle}}
+                    //-p {{watch.courseTitle}}
+                    p(ng-if='watch.isActive') An email will be sent to {{watch.email}} when this section has seats available.
                     p.text-success(ng-if='!watch.isActive') Notification Sent - Not Active
                     button.btn.btn-danger(ng-click='watchesList.deleteWatch(watch._id)') Delete

@@ -5,7 +5,7 @@ var WatchSchema = new Schema({
     crn:{type:String, required: true},
     email:{type:String, required:true},
     term:{type:String, required:true},
-    userID: Schema.Types.ObjectId,
+    user: {type:Schema.Types.ObjectId, ref:'User'},
     termFriendly:String,
     title:String,
     courseTitle:String,

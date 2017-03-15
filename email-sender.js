@@ -6,8 +6,8 @@ var emailSender = {};
 emailSender.sendNotificationEmail = function (courseName, emailAddress, term, crn) {
     var email = new sendgrid.Email({
         to:emailAddress,
-        from: 'notifications@puclasswatch.xyz',
-        fromName:'Class Watcher Notifications',
+        from: 'notifications@puclass.space',
+        fromname:'Purdue Class Watcher',
         subject:'Now Available: ' + courseName,
         text:'A section that you are watching now has seats available.\n\nSee details at https://selfservice.mypurdue.purdue.edu/prod/bwckschd.p_disp_detail_sched?term_in='+term+'&crn_in='+crn
     });

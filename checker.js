@@ -1,18 +1,22 @@
-var credentials = require('./credentials.json');
-var sendgrid  = require('sendgrid')(credentials.sendgrid.key);
-var request = require('request');
-var cheerio = require('cheerio');
-var Watch = require('./models/watch');
-var emailSender = require('./email-sender');
-var checker = {};
+'use strict';
+const credentials = require('./credentials.json');
+const sendgrid = require('sendgrid')(credentials.sendgrid.key);
+const request = require('request');
+const cheerio = require('cheerio');
+const Watch = require('./models/watch');
+const emailSender = require('./email-sender');
+const Pushover = require('node-pushover');
+const push = new Pushover({token:credentials.pushover.key});
+let checker = {};
 
 /*
 given a term number and crn, parses the corresponding catalog page, extracting seat information and passes it
 to a callback in object form
 */
+//todo: better string formatting
 checker.getSection = function(term, crn, callback){
 
-    var section = {};
+    let section = {};
 
     request('https://selfservice.mypurdue.purdue.edu/prod/bwckschd.p_disp_detail_sched?term_in='+term+'&crn_in='+crn,function (err, res, html) {
         if(!err){
@@ -36,14 +40,17 @@ checker.getSection = function(term, crn, callback){
 
 //iterates through all active class watches and sends email notifications if there are available seats
 checker.checkWatches = function (callback) {
-    Watch.find({active:true}, function (err, watches) {
+    Watch.find({active:true}).populate('user').exec(function (err, watches) {
         if(err)
             callback(err, null);
         else{
-            for(var i = 0;i<watches.length;i++){
-                var watch = watches[i];
+            for(let i = 0;i<watches.length;i++){
+                let watch = watches[i];
                 checker.getSection(watch.term, watch.crn, function (err, section) {
                     if(section.availableSeats>0){
+                        if(watch.user && watch.user.pushoverKey){
+                            push.send(watch.user.pushoverKey, "Class Available: "+watch.title, watch.title+" is now available.")
+                        }
                         emailSender.sendNotificationEmail(section.title, watch.email, watch.term, watch.crn);
                     }
                 })
