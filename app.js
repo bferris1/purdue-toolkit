@@ -58,11 +58,13 @@ app.use(cookieParser());
 app.use(flash());
 app.use(helmet());
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(express.session());
 
 app.use(session({
     secret: credentials.session.secret,
-    store: new MongoStore({mongooseConnection:mongoose.connection}),
+    store: new MongoStore({
+        mongooseConnection:mongoose.connection,
+        autoRemove: 'native' // Default
+    }),
     name: credentials.session.name,
     saveUninitialized:false,
     resave:false,
@@ -88,6 +90,9 @@ passport.deserializeUser(function(id, done) {
 app.use('/', routes);
 app.use('/users', users);
 app.use('/api', api);
+
+//check watches every 5 minutes
+setInterval(checker.checkWatches,1000*15);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
