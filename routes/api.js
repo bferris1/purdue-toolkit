@@ -3,7 +3,7 @@ var router = express.Router();
 var User = require('../models/user');
 var Watch = require('../models/watch');
 var jwt = require('jsonwebtoken');
-var credentials = require('../credentials.json');
+var config = require('../config.json');
 
 
 
@@ -31,7 +31,7 @@ router.post('/auth',function (req, res) {
                         email: user.email,
                         id: user._id
                     },
-                    credentials.jwt.secret,
+                    config.jwt.secret,
                     {
                         //expiresInMinutes: 10080
                     });
@@ -57,7 +57,7 @@ router.use(function (req, res, next) {
         var token = req.body.token || req.params.token ||req.headers['x-access-token'];
 
         if(token){
-            jwt.verify(token,credentials.jwt.secret,function(err, decoded){
+            jwt.verify(token,config.jwt.secret,function(err, decoded){
                 if(err){
                     return res.status(403).send({success:false,message:'Failed to authenticate token'});
                 }else{

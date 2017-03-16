@@ -15,9 +15,9 @@ var flash = require('express-flash');
 var helmet = require('helmet');
 var expressValidator = require('express-validator');
 var checker = require('./checker');
-var credentials = require('./credentials.json');
+var config = require('./config.json');
 mongoose.Promise = require('bluebird');
-mongoose.connect(credentials.db.url);
+mongoose.connect(config.db.url);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -60,12 +60,12 @@ app.use(helmet());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-    secret: credentials.session.secret,
+    secret: config.session.secret,
     store: new MongoStore({
         mongooseConnection:mongoose.connection,
         autoRemove: 'native' // Default
     }),
-    name: credentials.session.name,
+    name: config.session.name,
     saveUninitialized:false,
     resave:false,
     cookie: {
@@ -91,8 +91,8 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/api', api);
 
-//check watches every 5 minutes
-setInterval(checker.checkWatches,1000*15);
+//check watches regularyly, as defined in configuration file
+setInterval(checker.checkWatches,60000*config.checker.interval);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

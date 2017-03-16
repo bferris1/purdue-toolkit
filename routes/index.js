@@ -6,8 +6,8 @@ var Watch = require('../models/watch');
 var passport = require('passport');
 var crypto = require('crypto');
 var validator = require('validator');
-var credentials = require('../credentials.json');
-var sendgrid  = require('sendgrid')(credentials.sendgrid.key);
+var config = require('../config.json');
+var sendgrid  = require('sendgrid')(config.sendgrid.key);
 var checker = require('../checker');
 var applicationURL = process.env.URL || 'http://localhost:3000';
 

@@ -1,5 +1,5 @@
-var credentials = require('./credentials.json');
-var sendgrid  = require('sendgrid')(credentials.sendgrid.key);
+var config = require('./config.json');
+var sendgrid  = require('sendgrid')(config.sendgrid.key);
 var emailSender = {};
 
 //todo: error handling

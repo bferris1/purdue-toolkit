@@ -1,12 +1,12 @@
 'use strict';
-const credentials = require('./credentials.json');
-const sendgrid = require('sendgrid')(credentials.sendgrid.key);
+const config = require('./config.json');
+const sendgrid = require('sendgrid')(config.sendgrid.key);
 const request = require('request');
 const cheerio = require('cheerio');
 const Watch = require('./models/watch');
 const emailSender = require('./email-sender');
 const Pushover = require('node-pushover');
-const push = new Pushover({token:credentials.pushover.key});
+const push = new Pushover({token:config.pushover.key});
 const async = require('async');
 let checker = {};
 

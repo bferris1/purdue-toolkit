@@ -1,5 +1,5 @@
 'use strict';
-var credentials = require('./credentials.json');
+var credentials = require('./config.json');
 var sendgrid  = require('sendgrid')(credentials.sendgrid.key);
 var request = require('request');
 var cheerio = require('cheerio');
