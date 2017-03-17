@@ -7,8 +7,8 @@ var passport = require('passport');
 var crypto = require('crypto');
 var validator = require('validator');
 var config = require('../config.json');
-var sendgrid  = require('sendgrid')(config.sendgrid.key);
 var checker = require('../checker');
+const emailSender = require('../email-sender');
 var applicationURL = process.env.URL || 'http://localhost:3000';
 
 //always include the user object when rendering views
@@ -176,7 +176,7 @@ router.get('/forgot',function(req, res){
 
 //route for requesting a password reset
 router.post('/forgot',function (req, res) {
-    //redirect if the user is not logged in
+    //redirect if the user is logged in
     if(req.user) res.redirect('/');
     else
     if(req.body.email&&req.body.email!=''){
@@ -189,6 +189,10 @@ router.post('/forgot',function (req, res) {
             else{
                 crypto.randomBytes(20, function (err, buff) {
                     // store the buffer as the user's reset key
+                    if(err){
+                        res.status(err.status || 500);
+                        res.render('error', {message:err.message, err:err});
+                    }
                     user.resetToken = buff.toString('hex');
                     user.resetExpiration = Date.now()+3600000; //expires in one hour
                     user.save(function (err, user) {
@@ -196,21 +200,11 @@ router.post('/forgot',function (req, res) {
                             res.send('error');
                         else{
                             //send a reset email to the user
-                            var email = new sendgrid.Email({
-                                to:user.email,
-                                from:'notifications@putoolkit.xyz',
-                                subject:'Class Watcher Password Reset',
-                                html:'this will be replaced by the template',
-                                text:applicationURL + '/reset/' + buff.toString('hex')
-                            });
-                            // add filter settings one at a time
-                            email.addFilter('templates', 'enable', 1);
-                            email.addFilter('templates', 'template_id', 'ad392fc9-55b7-4fef-9bae-3288156aec58');
-                            email.addSubstitution('-resetURL-',applicationURL + '/reset/'+buff.toString('hex'));
-                            sendgrid.send(email,function (err, json) {
+                            emailSender.sendPasswordResetEmail(user.email, user.resetToken, function (err, json) {
                                 if(err) {
                                     console.log(err);
-                                    res.send('error');
+                                    res.status(err.status || 500);
+                                    res.render('error',{message:err.message, err:err});
                                 }
                                 else {
                                     req.flash('info','A email has been sent with further instructions.');

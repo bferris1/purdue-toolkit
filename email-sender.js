@@ -1,6 +1,8 @@
+'use strict';
 var config = require('./config.json');
 var sendgrid  = require('sendgrid')(config.sendgrid.key);
 var emailSender = {};
+const applicationURL = process.env.URL || 'http://localhost:3000';
 
 //todo: error handling
 emailSender.sendNotificationEmail = function (courseName, emailAddress, term, crn) {
@@ -23,6 +25,24 @@ emailSender.testMail = function (emailAddress) {
         text:'This message tests the email sending functionality.'
     });
     sendgrid.send(email);
+};
+
+emailSender.sendPasswordResetEmail = function (emailAddress, resetToken, callback) {
+    let email = new sendgrid.Email({
+        to:emailAddress,
+        from:'notifications@puclass.space',
+        fromname:'Purdue Class Watcher',
+        subject:'Class Watcher Password Reset',
+        html:'this will be replaced by the template',
+        text:applicationURL + '/reset/' + resetToken
+    });
+    email.addFilter('templates', 'enable', 1);
+    email.addFilter('templates', 'template_id', 'ad392fc9-55b7-4fef-9bae-3288156aec58');
+    email.addSubstitution('-resetURL-',applicationURL + '/reset/'+resetToken);
+
+    sendgrid.send(email, callback);
+
+
 };
 
 module.exports = emailSender;
