@@ -68,9 +68,9 @@ app.use(session({
     name: config.session.name,
     saveUninitialized:false,
     resave:false,
-    cookie: {
-        expires: new Date(Date.now()+(1000*60*60*24))  // 1 day
-    }
+    // cookie: {
+    //     expires: new Date(Date.now()+(1000*60*60*24))  // 1 day
+    // }
 
 }));
 app.use(passport.initialize());
