@@ -1,8 +1,8 @@
-var express = require('express');
+'use strict';
+let express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -54,7 +54,6 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
-app.use(cookieParser());
 app.use(flash());
 app.use(helmet());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -68,9 +67,9 @@ app.use(session({
     name: config.session.name,
     saveUninitialized:false,
     resave:false,
-    // cookie: {
-    //     expires: new Date(Date.now()+(1000*60*60*24))  // 1 day
-    // }
+    cookie: {
+        maxAge: 7*60*60*1000  // 1 week in milliseconds
+    }
 
 }));
 app.use(passport.initialize());
