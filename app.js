@@ -1,29 +1,28 @@
-'use strict';
-let express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var User = require('./models/user');
-var password = 'nacre-means-scion';
-var mongoose = require('mongoose');
-var session = require('express-session');
-var MongoStore = require('connect-mongo')(session);
-var flash = require('express-flash');
-var helmet = require('helmet');
-var expressValidator = require('express-validator');
-var checker = require('./checker');
-var config = require('./config.json');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const User = require('./models/user');
+const password = 'nacre-means-scion';
+const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+const flash = require('express-flash');
+const helmet = require('helmet');
+const expressValidator = require('express-validator');
+const checker = require('./checker');
+const config = require('./config.json');
 mongoose.Promise = require('bluebird');
 mongoose.connect(config.db.url);
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var api = require('./routes/api');
+const routes = require('./routes/index');
+const users = require('./routes/users');
+const api = require('./routes/api');
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -72,8 +71,7 @@ app.use(session({
     }
 
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+
 
 passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -85,6 +83,9 @@ passport.deserializeUser(function(id, done) {
     });
 });
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.use('/', routes);
 app.use('/users', users);
@@ -95,7 +96,7 @@ setInterval(checker.checkWatches,60000*config.checker.interval);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+    let err = new Error('Not Found');
     err.status = 404;
     next(err);
 });

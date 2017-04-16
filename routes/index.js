@@ -1,15 +1,14 @@
-'use strict';
-var express = require('express');
-var router = express.Router();
-var User = require('../models/user');
-var Watch = require('../models/watch');
-var passport = require('passport');
-var crypto = require('crypto');
-var validator = require('validator');
-var config = require('../config.json');
-var checker = require('../checker');
+const express = require('express');
+const router = express.Router();
+const User = require('../models/user');
+const Watch = require('../models/watch');
+const passport = require('passport');
+const crypto = require('crypto');
+const validator = require('validator');
+const config = require('../config.json');
+const checker = require('../checker');
 const emailSender = require('../email-sender');
-var applicationURL = process.env.URL || 'http://localhost:3000';
+const applicationURL = process.env.URL || 'http://localhost:3000';
 
 //always include the user object when rendering views
 router.use(function(req, res, next){
