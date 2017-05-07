@@ -3,7 +3,7 @@ This is a NodeJS/Express app. Currently, it's only function is to watch classes 
 
 ## Installation
 
-This app requires npm and Bower. Ensure that npm and bower are installed globally, then run `npm install`. A "config.json" file will need to be placed in the root directory. It should be in this form:
+Ensure that node/npm are installed then run `npm install` in the project root. A "config.json" file will need to be placed in the root directory. It should be in this form:
 
 ```json
 {
