@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test" : "mocha"
   },
   "dependencies": {
     "async": "^2.0.0-rc.6",
@@ -19,7 +20,7 @@
     "express-validator": "^2.20.5",
     "helmet": "^2.1.1",
     "jsonwebtoken": "^7.0.1",
-    "mongoose": "^4.4.17",
+    "mongoose": "^4.11.1",
     "morgan": "~1.6.1",
     "node-pushover": "^0.2.2",
     "passport": "^0.3.2",
@@ -27,7 +28,7 @@
     "pug": "^2.0.0-beta11",
     "request": "^2.72.0",
     "request-promise": "^4.2.0",
-    "sendgrid": "^2.0.0",
+    "sendgrid": "^5.1.2",
     "serve-favicon": "~2.3.0",
     "validator": "^5.3.0"
   },

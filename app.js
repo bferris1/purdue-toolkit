@@ -15,7 +15,9 @@ const expressValidator = require('express-validator');
 const checker = require('./checker');
 const config = require('./config.json');
 mongoose.Promise = require('bluebird');
-mongoose.connect(config.db.url);
+mongoose.connect(config.db.url,{
+    useMongoClient:true
+});
 
 const routes = require('./routes/index');
 const users = require('./routes/users');

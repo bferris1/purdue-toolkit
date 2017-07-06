@@ -203,7 +203,7 @@ router.post('/forgot',function (req, res) {
                                 if(err) {
                                     console.log(err);
                                     res.status(err.status || 500);
-                                    res.render('error',{message:err.message, err:err});
+                                    res.render('error',{message:err.message, error:err});
                                 }
                                 else {
                                     req.flash('info','A email has been sent with further instructions.');

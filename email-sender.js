@@ -1,46 +1,82 @@
 'use strict';
-var config = require('./config.json');
-var sendgrid  = require('sendgrid')(config.sendgrid.key);
-var emailSender = {};
+const config = require('./config.json');
+const sendgrid  = require('sendgrid')(config.sendgrid.key);
+const helper = require('sendgrid').mail;
+let emailSender = {};
 const applicationURL = process.env.URL || 'http://localhost:3000';
+let fromAddress = "watcher@"+config.hosting.domain;
+
+
+function send(message, callback) {
+
+    let request = sendgrid.emptyRequest({
+        method: 'POST',
+        path: '/v3/mail/send',
+        body: message.toJSON()
+    });
+
+    sendgrid.API(request, function (err, response) {
+        if (err) {
+            console.log(JSON.stringify(err));
+            if (callback)
+                callback(err);
+        }
+        else{
+            console.log(response.statusCode);
+            if(callback)
+                callback(null,{});
+        }
+    });
+}
+
+
 
 //todo: error handling
 emailSender.sendNotificationEmail = function (courseName, emailAddress, term, crn) {
-    var email = new sendgrid.Email({
-        to:emailAddress,
-        from: 'notifications@puclass.space',
-        fromname:'Purdue Class Watcher',
-        subject:'Now Available: ' + courseName,
-        text:'A section that you are watching now has seats available.\n\nSee details at https://selfservice.mypurdue.purdue.edu/prod/bwckschd.p_disp_detail_sched?term_in='+term+'&crn_in='+crn
-    });
-    sendgrid.send(email);
+    let from = new helper.Email(fromAddress,"Class Watcher");
+    let to = new helper.Email(emailAddress);
+    let subject = 'Now Available: ' + courseName;
+    let text = 'A section that you are watching now has seats available.\n\nSee details at https://selfservice.mypurdue.purdue.edu/prod/bwckschd.p_disp_detail_sched?term_in='+term+'&crn_in='+crn;
+    let content = new helper.Content('text/plain',text);
+    let message = new helper.Mail(from, subject, to, content);
+
+
+    send(message);
 };
 
-emailSender.testMail = function (emailAddress) {
-    var email = new sendgrid.Email({
-        to:emailAddress,
-        from:'notification@puclass.space',
-        fromname:'Class Watcher Notifications',
-        subject:'Testing SetInterval',
-        text:'This message tests the email sending functionality.'
-    });
-    sendgrid.send(email);
+emailSender.testMail = function (emailAddress, callback) {
+    let from = new helper.Email(fromAddress,"Class Watcher Notifications");
+    let to = new helper.Email(emailAddress);
+    let subject = "Sendgrid Testing";
+    let content = new helper.Content('text/plain',"Testing email sending");
+    let message = new helper.Mail(from,subject,to,content);
+    let mailSettings = new helper.MailSettings();
+    mailSettings.setSandBoxMode(new helper.SandBoxMode(true));
+    message.addMailSettings(mailSettings);
+
+    send(message,callback);
 };
 
 emailSender.sendPasswordResetEmail = function (emailAddress, resetToken, callback) {
-    let email = new sendgrid.Email({
-        to:emailAddress,
-        from:'notifications@puclass.space',
-        fromname:'Purdue Class Watcher',
-        subject:'Class Watcher Password Reset',
-        html:'this will be replaced by the template',
-        text:applicationURL + '/reset/' + resetToken
-    });
-    email.addFilter('templates', 'enable', 1);
-    email.addFilter('templates', 'template_id', 'ad392fc9-55b7-4fef-9bae-3288156aec58');
-    email.addSubstitution('-resetURL-',applicationURL + '/reset/'+resetToken);
+    let resetURL = applicationURL+'/reset/'+resetToken;
 
-    sendgrid.send(email, callback);
+    let from = new helper.Email(fromAddress, config.sendgrid.fromName);
+    let to = new helper.Email(emailAddress);
+    let subject = "Class Watcher Password Reset";
+    let message = new helper.Mail();
+    message.setFrom(from);
+    message.setTemplateId('ad392fc9-55b7-4fef-9bae-3288156aec58');
+    let personalization = new helper.Personalization();
+    let substitution = new helper.Substitution("-resetURL-",resetURL);
+    personalization.addSubstitution(substitution);
+    personalization.addTo(to);
+    personalization.setSubject(subject);
+    let content = new helper.Content('text/plain',resetURL);
+    message.addContent(content);
+
+    message.addPersonalization(personalization);
+
+    send(message, callback);
 
 
 };
