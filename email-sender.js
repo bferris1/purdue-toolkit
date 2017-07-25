@@ -72,7 +72,10 @@ emailSender.sendPasswordResetEmail = function (emailAddress, resetToken, callbac
     personalization.addTo(to);
     personalization.setSubject(subject);
     let content = new helper.Content('text/plain',resetURL);
+    let contentHTML = new helper.Content('text/html',resetURL);
+
     message.addContent(content);
+    message.addContent(contentHTML);
 
     message.addPersonalization(personalization);
 
