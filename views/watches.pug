@@ -4,7 +4,7 @@ block title
     title Manage Watches
 
 block extraScript
-    script(src='https://code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=' crossorigin='anonymous')
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=')
     script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js')
     script(src='/js/watches.js')
 
@@ -19,6 +19,7 @@ block content
                     h3.panel-title {{watch.courseNumber}} - {{watch.courseTitle}} - {{watch.termFriendly}} <span class='pull-right'>Section {{watch.sectionNumber}}</span>
                 .panel-body
                     //-p {{watch.courseTitle}}
+                    p CRN: {{watch.crn}}
                     p(ng-if='watch.isActive') An email will be sent to {{watch.email}} when this section has seats available.
                     p.text-success(ng-if='!watch.isActive') Notification Sent - Not Active
                     button.btn.btn-danger(ng-click='watchesList.deleteWatch(watch._id)') Delete
