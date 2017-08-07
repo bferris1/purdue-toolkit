@@ -45,7 +45,12 @@ router.post('/',function (req, res) {
             }
             else{
                 if(section.availableSeats>0){
-                    req.flash('error','It looks like there are still '+section.availableSeats+' available seats in this section!');
+                    let seatsMessage;
+                    if (section.availableSeats == 1)
+                        seatsMessage = 'It looks like there is still 1 available seat in this section!';
+                    else
+                        seatsMessage = 'It looks like there are still ' + section.availableSeats + ' available seats in this section!';
+                    req.flash('error',seatsMessage);
                     res.render('index');
                 }else{
                     //check for active duplicates

@@ -27,7 +27,8 @@ checker.getSection = function(term, crn, callback){
             section.totalSeats = seatsRow.children('td').first().text();
             section.filledSeats = seatsRow.children('td').eq(1).text();
             section.availableSeats = seatsRow.children('td').last().text();
-            if(section.title&&section.totalSeats&&section.filledSeats&&section.availableSeats){
+            //cheerio parsing returns empty strings (?) if there is no value, so that's what we're checking for
+            if(section.title &&section.totalSeats&&section.filledSeats&&section.availableSeats){
                 callback(err, section);
             }else{
                 callback(new Error('An error occurred while attempting to retrieve class information. Make sure the CRN is entered correctly.'), null)
