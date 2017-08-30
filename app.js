@@ -54,7 +54,6 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
-app.use(flash());
 app.use(helmet());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -72,6 +71,9 @@ app.use(session({
     }
 
 }));
+
+app.use(flash());
+
 
 
 passport.serializeUser(function(user, done) {
