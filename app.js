@@ -4,6 +4,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('./models/user');
 const mongoose = require('mongoose');
@@ -14,6 +15,7 @@ const helmet = require('helmet');
 const expressValidator = require('express-validator');
 const checker = require('./checker');
 const config = require('./config.json');
+const applicationURL = process.env.URL || 'http://localhost:3000';
 mongoose.Promise = require('bluebird');
 mongoose.connect(config.db.url,{
     useMongoClient:true
@@ -39,13 +41,42 @@ passport.use(new LocalStrategy(
             if (!user) {
                 return done(null, false, { message: 'Incorrect email address.' });
             }
-            if (!user.comparePassword(password)) {
+            if (!user.password)
+                return done(null, false, {message: "You don't have a password. Try a different method."})
+            if (!user.password || !user.comparePassword(password)) {
                 return done(null, false, { message: 'Incorrect password.' });
             }
             return done(null, user);
         });
     }
 ));
+passport.use(new GoogleStrategy({
+        clientID: "569291200494-nk99o76eroeh35rk575lnuc1mthh84fd.apps.googleusercontent.com",
+        clientSecret: "WHdcZlCZEFkhSCbViTzjGW56",
+        callbackURL: applicationURL + "/auth/google/callback"
+    },
+    function(accessToken, refreshToken, profile, done) {
+    console.log(profile);
+    console.log(profile.emails);
+    User.findOne({
+        $or: [ { googleId: profile.id }, { email:profile.emails[0].value } ]
+    }, function (err, user) {
+        if (user)
+            return done (err, user);
+        else {
+            let user = new User();
+            user.googleId = profile.id;
+            user.email = profile.emails[0].value;
+            user.save().then(()=>{
+                return done(null, user);
+            })
+
+        }
+    });
+    }
+));
+
+
 
 
 // uncomment after placing your favicon/public
@@ -88,7 +119,24 @@ passport.deserializeUser(function(id, done) {
 
 app.use(passport.initialize());
 app.use(passport.session());
+// GET /auth/google
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  The first step in Google authentication will involve
+//   redirecting the user to google.com.  After authorization, Google
+//   will redirect the user back to this application at /auth/google/callback
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email'] }));
 
+// GET /auth/google/callback
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  If authentication fails, the user will be redirected back to the
+//   login page.  Otherwise, the primary route function function will be called,
+//   which, in this example, will redirect the user to the home page.
+app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    function(req, res) {
+        res.redirect('/');
+    });
 
 app.use('/', routes);
 app.use('/users', users);
