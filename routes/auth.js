@@ -8,7 +8,7 @@ const passport = require('passport');
 //   redirecting the user to google.com.  After authorization, Google
 //   will redirect the user back to this application at /auth/google/callback
 router.get('/google',
-    passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.email']})
+    passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile']})
 );
 
 // GET /auth/google/callback

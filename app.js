@@ -42,7 +42,7 @@ passport.use(new LocalStrategy(
                 return done(null, false, { message: 'Incorrect email address.' });
             }
             if (!user.password)
-                return done(null, false, {message: "You don't have a password. Try a different method."})
+                return done(null, false, {message: "You don't have a password. Try a different method."});
             if (!user.password || !user.comparePassword(password)) {
                 return done(null, false, { message: 'Incorrect password.' });
             }
@@ -67,6 +67,8 @@ passport.use(new GoogleStrategy({
             let user = new User();
             user.googleId = profile.id;
             user.email = profile.emails[0].value;
+            user.firstName = profile.name.givenName;
+            user.lastName = profile.name.familyName;
             user.save().then(()=>{
                 return done(null, user);
             })
