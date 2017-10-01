@@ -6,12 +6,13 @@ var UserSchema = new Schema({
     firstName: String,
     lastName: String,
     email: {type:String,required:true,index:{unique:true}},
-    password: {type:String, required:true, select:false},
+    password: {type:String, required:false, select:false},
     phone:String,
     premium:{type:Boolean, default:false},
     pushoverKey:String,
     resetToken:String,
-    resetExpiration:Date
+    resetExpiration:Date,
+    googleId: String
 
 });
 
