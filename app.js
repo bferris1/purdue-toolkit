@@ -1,5 +1,12 @@
 const express = require('express');
 const path = require('path');
+let config;
+try {
+     config = require('./config.json');
+} catch (error) {
+    console.error("A config.json file is required.");
+    process.exit(1);
+}
 const favicon = require('serve-favicon');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
@@ -13,7 +20,6 @@ const flash = require('express-flash');
 const helmet = require('helmet');
 const expressValidator = require('express-validator');
 const checker = require('./checker');
-const config = require('./config.json');
 mongoose.Promise = require('bluebird');
 mongoose.connect(config.db.url,{
     useMongoClient:true
