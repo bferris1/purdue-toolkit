@@ -1,16 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
 const Watch = require('../models/watch');
 const account = require('./account');
 const resetRoutes = require ('./reset');
 const forgotRoutes = require('./forgot');
+const signupRoutes = require('./signup');
 const passport = require('passport');
-const crypto = require('crypto');
-const validator = require('validator');
-const config = require('../config.json');
 const checker = require('../checker');
-const emailSender = require('../email-sender');
 const applicationURL = process.env.URL || 'http://localhost:3000';
 
 //always include the user object when rendering views
@@ -134,47 +130,6 @@ router.use('/forgot', forgotRoutes);
 
 router.use('/reset', resetRoutes);
 
-router.get('/signup',function(req, res){
-    if(req.user) res.redirect('/');
-    else
-    res.render('signup');
-});
-router.post('/signup',function(req, res){
-    if(req.user) res.redirect('/');
-    req.sanitizeBody('email').trim();
-    req.checkBody('email', 'Email address is required').notEmpty();
-    req.checkBody('email', 'Email address is invalid').isEmail();
-    req.checkBody('password', 'Password is required').notEmpty();
-    req.checkBody('password', 'Password must be at least 8 characters.').len(8, undefined);
-    if(req.validationErrors()){
-        res.render('signup',{validationErrors:req.validationErrors()});
-    }else{
-        var user = new User();
-        user.email = validator.trim(req.body.email);
-        user.password = req.body.password;
-
-        user.save(function (err, user){
-            if (err) {
-                if (err.code == 11000){
-                    req.flash('error','A user with that email address already exists.');
-                    res.render('signup');
-                }
-                else{
-                    req.flash('error','An error occurred while saving to the database.');
-                    res.render('signup');
-                }
-            } else{
-                req.login(user,function(err){
-                    if(err) return next(err);
-                    else return res.redirect('/account')
-                })
-            }
-
-        });
-    }
-
-
-
-});
+router.use('/signup', signupRoutes);
 
 module.exports = router;
