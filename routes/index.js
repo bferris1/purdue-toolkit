@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
 const Watch = require('../models/watch');
+const account = require('./account');
+const resetRoutes = require ('./reset');
+const forgotRoutes = require('./forgot');
+const signupRoutes = require('./signup');
 const passport = require('passport');
-const crypto = require('crypto');
-const validator = require('validator');
-const config = require('../config.json');
 const checker = require('../checker');
-const emailSender = require('../email-sender');
 const applicationURL = process.env.URL || 'http://localhost:3000';
 
 //always include the user object when rendering views
@@ -86,53 +85,7 @@ router.post('/',function (req, res) {
     }
 });
 
-router.get('/account',function(req, res){
-    if(req.user) res.render('account');
-    else res.redirect('/login');
-});
-
-router.post('/account', function (req, res) {
-    //todo: check input stuff
-    if(req.body.email)
-        req.checkBody('email','Email is not valid').optional().isEmail().notEmpty();
-    if(req.body.password)
-        req.checkBody('password', 'Password must be at least 8 characters.').optional().len(8, undefined);
-
-    if(req.validationErrors()){
-        res.render('account',{validationErrors:req.validationErrors()});
-    }else{
-        if(req.user){
-            let user = req.user;
-            console.log('Email:'+req.body.email);
-            if(req.body.firstName)
-                user.firstName = req.body.firstName;
-            if(req.body.lastName)
-                user.lastName = req.body.lastName;
-            if(req.body.email)
-                user.email = req.body.email;
-            if(req.body.password)
-                user.password = req.body.password;
-            if(req.body.pushoverKey){
-                user.pushoverKey = req.body.pushoverKey;
-            }else {
-                user.pushoverKey = null;
-            }
-            user.save(function (err, user) {
-                if(!err){
-                    req.flash('success','Account updated.');
-                    res.render('account');
-                }else{
-                    req.flash('error','An error occurred while saving your information.');
-                    res.render('account');
-                }
-            })
-        }else{
-            res.redirect('/login');
-        }
-    }
-
-
-});
+router.use('/account', account);
 
 //route for the watches page
 
@@ -173,151 +126,10 @@ router.get('/logout',function(req, res){
     res.redirect('/');
 });
 
-router.get('/forgot',function(req, res){
-    if(req.user) res.redirect('/');
-    res.render('forgot');
-});
+router.use('/forgot', forgotRoutes);
 
-//route for requesting a password reset
-router.post('/forgot',function (req, res) {
-    //redirect if the user is logged in
-    if(req.user) res.redirect('/');
-    else
-    if(req.body.email&&req.body.email!=''){
-        console.log(req.body.email);
-        User.findOne({email:req.body.email},function (err, user) {
-            if(err||!user) {
-                req.flash('error','Email address not found');
-                res.render('forgot');
-            }
-            else{
-                crypto.randomBytes(20, function (err, buff) {
-                    // store the buffer as the user's reset key
-                    if(err){
-                        res.status(err.status || 500);
-                        res.render('error', {message:err.message, err:err});
-                    }
-                    user.resetToken = buff.toString('hex');
-                    user.resetExpiration = Date.now()+3600000; //expires in one hour
-                    user.save(function (err, user) {
-                        if(err)
-                            res.send('error');
-                        else{
-                            //send a reset email to the user
-                            emailSender.sendPasswordResetEmail(user.email, user.resetToken, function (err, json) {
-                                if(err) {
-                                    console.log(err);
-                                    res.status(err.status || 500);
-                                    res.render('error',{message:err.message, error:err});
-                                }
-                                else {
-                                    req.flash('info','A email has been sent with further instructions.');
-                                    res.render('forgot');
-                                }
-                            })
+router.use('/reset', resetRoutes);
 
-                        }
-
-                    })
-                })
-            }
-        })
-    }else{
-        req.flash('error', 'Email address is required.');
-        res.render('forgot');
-    }
-
-});
-
-//routes for resetting password
-router.get('/reset/:token', function (req, res) {
-    if(req.params.token&&req.params.token!=''){
-        User.findOne({resetToken:req.params.token, resetExpiration:{$gt:Date.now()}}, function (err, user) {
-            if(!user){
-                req.flash('error', 'Password reset token is invalid or has expired.');
-                res.redirect('/forgot')
-            }
-            else{
-                res.render('reset')
-            }
-        })
-    }else{res.redirect('/forgot');}
-});
-
-router.post('/reset/:token', function(req, res){
-    //find the user if the reset token has not expired
-    User.findOne({resetToken:req.params.token, resetExpiration:{$gt:Date.now()}}, function(err, user){
-        if(!user){
-            //error message handling
-            req.flash('error', 'Password reset token is invalid or has expired.');
-            res.redirect('/forgot');
-        }else{
-            req.checkBody('password', 'Password is required').notEmpty();
-            req.checkBody('password', 'Password must be at least 8 characters.').len(8, undefined);
-            if(req.validationErrors()){
-                res.render('reset',{validationErrors:req.validationErrors()});
-            }else{
-                user.password = req.body.password;
-                user.resetToken = undefined;
-                user.resetExpiration = undefined;
-                user.save(function (err, user) {
-                    req.login(user, function (err) {
-                        if(err){
-                            req.flash('error','Unable to log in.');
-                            res.redirect('/forgot');
-                        }
-                        else {
-                            req.flash('success', 'Your password has been updated.');
-                            res.redirect('/account');
-                        }
-                    })
-                })
-            }
-        }
-    })
-});
-
-router.get('/signup',function(req, res){
-    if(req.user) res.redirect('/');
-    else
-    res.render('signup');
-});
-router.post('/signup',function(req, res){
-    if(req.user) res.redirect('/');
-    req.sanitizeBody('email').trim();
-    req.checkBody('email', 'Email address is required').notEmpty();
-    req.checkBody('email', 'Email address is invalid').isEmail();
-    req.checkBody('password', 'Password is required').notEmpty();
-    req.checkBody('password', 'Password must be at least 8 characters.').len(8, undefined);
-    if(req.validationErrors()){
-        res.render('signup',{validationErrors:req.validationErrors()});
-    }else{
-        var user = new User();
-        user.email = validator.trim(req.body.email);
-        user.password = req.body.password;
-
-        user.save(function (err, user){
-            if (err) {
-                if (err.code == 11000){
-                    req.flash('error','A user with that email address already exists.');
-                    res.render('signup');
-                }
-                else{
-                    req.flash('error','An error occurred while saving to the database.');
-                    res.render('signup');
-                }
-            } else{
-                req.login(user,function(err){
-                    if(err) return next(err);
-                    else return res.redirect('/account')
-                })
-            }
-
-        });
-    }
-
-
-
-});
+router.use('/signup', signupRoutes);
 
 module.exports = router;
