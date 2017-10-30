@@ -1,0 +1,38 @@
+{
+  "db": {
+    "userName": "moufee",
+    "password": "password",
+    "url": "mongodb://user:password@server/database"
+  },
+
+  "session": {
+    "name": "Purdue Toolkit Session",
+    "secret": "sessionsecret",
+    "maxAge":7
+  },
+
+  "jwt": {
+    "secret": "jwtsecret"
+  },
+
+  "sendgrid": {
+    "key": "your sendgrid key",
+    "fromName":"Class Watcher"
+  },
+  "pushover":{
+    "key":"your pushover app key"
+  },
+  "checker":{
+    "interval": 15
+  },
+  "hosting":{
+    "domain":"puclass.space",
+    "url":"https://domain.com"
+  },
+  "auth":{
+    "google":{
+      "clientID":"your-client-id",
+      "clientSecret":"your-client-secret"
+    }
+  }
+}
