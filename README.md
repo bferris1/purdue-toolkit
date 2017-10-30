@@ -1,37 +1,17 @@
 # Purdue Toolkit
-This is a NodeJS/Express app. Currently, it's only function is to watch classes for available spaces and notify users when a space opens up in the class. Additional functions are planned for the future. It is intermittently hosted at [puclass.space](http://puclass.space)
+
+This is a NodeJS/Express app. Currently, it's only function is to watch classes for available spaces and notify users when a space opens up in the class. Additional functions are planned for the future. It is hosted at [puclass.space](http://puclass.space)
 
 ## Installation
 
-Ensure that node/npm are installed then run `npm install` in the project root. A "config.json" file will need to be placed in the root directory. It should be in this form:
+Ensure that node/npm and yarn are installed then run `yarn` (or `npm install`) in the project root. A "config.json" file will need to be placed in the root directory. It should be formatted like the "config-example" file. If you want to deploy with pm2, you can customize the included pm2 config file.
 
-```json
-{
-  "db": {
-    "userName": "myusername",
-    "password": "dbpassword",
-    "url": "mongodb://user:password@address/database"
-  },
+## Development
 
-  "session": {
-    "name": "Session Name",
-    "secret": "yoursessionsecret"
-  },
+Things that need to be done:
+* write tests
+* expand the JSON API
+    * allow account deletion
+* upgrade bootstrap
+* group watches by CRN for more efficient checking
 
-  "jwt": {
-    "secret": "jwtsecret"
-  },
-
-  "sendgrid": {
-    "key": "sendgrid key for sending email"
-  },
-  
-  "pushover":{
-    "key":"pushover application key"
-   },
-   
-  "checker":{
-    "interval": 5
-  }
-}
-```
