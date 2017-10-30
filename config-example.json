@@ -29,14 +29,6 @@
     "domain":"puclass.space",
     "url":"https://domain.com"
   },
-  "testing":{
-    "email":"email@yourdomain.com",
-    "password":"password",
-    "pushover_key":"your pushover user key",
-    "term":"201820",
-    "crn":"12345",
-    "userID":"youruserid"
-  },
   "auth":{
     "google":{
       "clientID":"your-client-id",
