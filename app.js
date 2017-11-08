@@ -63,8 +63,6 @@ passport.use(new GoogleStrategy({
         callbackURL: applicationURL + "/auth/google/callback"
     },
     function(accessToken, refreshToken, profile, done) {
-    console.log(profile);
-    console.log(profile.emails);
     User.findOne({
         $or: [ { googleId: profile.id }, { email:profile.emails[0].value } ]
     }, function (err, user) {
