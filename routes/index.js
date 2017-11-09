@@ -48,19 +48,19 @@ router.post('/',function (req, res) {
                     if (section.availableSeats == 1)
                         seatsMessage = 'It looks like there is still 1 available seat in this section!';
                     else
-                        seatsMessage = 'It looks like there are still ' + section.availableSeats + ' available seats in this section!';
+                        seatsMessage = `It looks like there are still ${section.availableSeats} seats available in this section`;
                     req.flash('error',seatsMessage);
                     res.render('index');
                 }else{
                     //check for active duplicates
                     Watch.findOne({email:req.body.email,crn:req.body.crn,term:req.body.term,isActive:true},function (err, foundWatch) {
                         if(!foundWatch){
-                            var watch = new Watch();
+                            let watch = new Watch();
                             watch.email = req.body.email;
                             watch.crn = req.body.crn;
                             watch.term = req.body.term;
                             watch.title = section.title;
-                            var titleParts  = section.title.split(' - ');
+                            let titleParts  = section.title.split(' - ');
                             watch.courseTitle = titleParts[0].trim();
                             watch.courseNumber = titleParts[2].trim();
                             watch.sectionNumber = titleParts[3].trim();
