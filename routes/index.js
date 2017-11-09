@@ -8,6 +8,7 @@ const signupRoutes = require('./signup');
 const passport = require('passport');
 const checker = require('../checker');
 const applicationURL = process.env.URL || 'http://localhost:3000';
+const { check, validationResult } = require('express-validator/check');
 
 //always include the user object when rendering views
 router.use(function(req, res, next){
@@ -23,16 +24,16 @@ router.get('/', function(req, res, next) {
 
 //post to home page to create a new watch
 //todo: better string formatting
-router.post('/',function (req, res) {
-    req.check('email', 'Email address is required.').notEmpty();
-    req.check('email', 'Email address is not valid.').isEmail();
-    req.check('crn', 'CRN is required.').notEmpty();
-    req.check('crn', 'CRN must be an integer.').isNumeric().isInt();
-    req.check('term', 'Term is invalid.').notEmpty().isNumeric();
-
-    if(req.validationErrors()){
-        res.render('index',{validationErrors:req.validationErrors()});
-    }else {
+router.post('/',[
+    check('email').exists().isEmail().withMessage('Email address is not valid.').trim(),
+    check('crn').isInt().withMessage('CRN is invalid'),
+    check('term').isInt().withMessage('Term is not valid')
+],function (req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        res.render('index', {validationErrors:errors.array()});
+    }
+    else {
         //verify CRN and make sure there is no space available
         console.log(req.body.crn);
         console.log(req.body.term);

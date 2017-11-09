@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const validator = require('validator');
+const { check, validationResult } = require('express-validator/check');
 
 
 router.get('/',function(req, res){
@@ -9,17 +10,18 @@ router.get('/',function(req, res){
     else
         res.render('signup');
 });
-router.post('/',function(req, res){
+router.post('/',[
+    check('email').isEmail().withMessage('Email address is invalid').trim(),
+    check('password').isLength({min:8}).withMessage('Password must be at least 8 characters.')
+],function(req, res){
     if(req.user) res.redirect('/');
-    req.sanitizeBody('email').trim();
-    req.checkBody('email', 'Email address is required').notEmpty();
-    req.checkBody('email', 'Email address is invalid').isEmail();
-    req.checkBody('password', 'Password is required').notEmpty();
-    req.checkBody('password', 'Password must be at least 8 characters.').len(8, undefined);
-    if(req.validationErrors()){
-        res.render('signup',{validationErrors:req.validationErrors()});
-    }else{
-        var user = new User();
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        res.render('signup', {validationErrors:errors.array()});
+    }
+    else{
+        let user = new User();
         user.email = validator.trim(req.body.email);
         user.password = req.body.password;
 

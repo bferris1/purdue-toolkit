@@ -19,7 +19,6 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('express-flash');
 const helmet = require('helmet');
-const expressValidator = require('express-validator');
 const checker = require('./checker');
 const applicationURL = process.env.URL || 'http://localhost:3000';
 
@@ -91,7 +90,6 @@ passport.use(new GoogleStrategy({
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(expressValidator());
 app.use(helmet());
 app.use(express.static(path.join(__dirname, 'public')));
 
