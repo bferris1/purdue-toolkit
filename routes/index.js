@@ -90,21 +90,9 @@ router.use('/account', account);
 //route for the watches page
 
 router.get('/watches', function (req, res) {
-    //todo: remove this, it uses the api now
     //check if user is logged in
     if(req.user){
-        //find all the user's watches
-        Watch.find({
-            $or: [ { email: req.user.email }, { user:req.user.id } ]
-        },function (err, watches) {
-            //send an error message if there is an error getting the watches
-            if(err){
-                req.flash('error',err.message);
-            }else{
-                //otherwise, render the template, passing it the array of watches
-                res.render('watches',{watches:watches})
-            }
-        })
+        res.render('watches');
     }else{
         //redirect to login page if not logged in
         res.redirect('/login');
