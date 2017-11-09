@@ -10,8 +10,9 @@ router.get('/',function(req, res){
     else
         res.render('signup');
 });
+
 router.post('/',[
-    check('email').isEmail().withMessage('Email address is invalid').trim(),
+    check('email').isEmail().withMessage('Email address is invalid.').trim(),
     check('password').isLength({min:8}).withMessage('Password must be at least 8 characters.')
 ],function(req, res){
     if(req.user) res.redirect('/');
@@ -41,14 +42,8 @@ router.post('/',[
                     else return res.redirect('/account')
                 })
             }
-
         });
     }
-
-
-
 });
-
-
 
 module.exports = router;
