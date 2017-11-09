@@ -34,5 +34,10 @@
       "clientID":"your-client-id",
       "clientSecret":"your-client-secret"
     }
+  },
+  "testing":{
+    "email":"email@domain.com",
+    "password":"asdffdsa",
+    "pushover_key":"YOUR_USER_KEY"
   }
 }
