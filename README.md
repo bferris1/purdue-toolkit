@@ -13,5 +13,6 @@ Things that need to be done:
 * expand the JSON API
     * allow account deletion
 * upgrade bootstrap
+* upgrade dependencies
 * group watches by CRN for more efficient checking
 
