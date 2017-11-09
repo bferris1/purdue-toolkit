@@ -1,6 +1,5 @@
 'use strict';
 const config = require('./config.json');
-const sendgrid = require('sendgrid')(config.sendgrid.key);
 const request = require('request');
 const cheerio = require('cheerio');
 const Watch = require('./models/watch');
@@ -29,6 +28,10 @@ checker.getSection = function(term, crn, callback){
             section.availableSeats = seatsRow.children('td').last().text();
             //cheerio parsing returns empty strings (?) if there is no value, so that's what we're checking for
             if(section.title &&section.totalSeats&&section.filledSeats&&section.availableSeats){
+                let titleParts  = section.title.split(' - ');
+                section.courseTitle = titleParts[0].trim();
+                section.courseNumber = titleParts[2].trim();
+                section.sectionNumber = titleParts[3].trim();
                 callback(err, section);
             }else{
                 callback(new Error('An error occurred while attempting to retrieve class information. Make sure the CRN is entered correctly.'), null)

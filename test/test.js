@@ -26,7 +26,7 @@ after(function () {
 describe('Pushover', function () {
     it('should successfully send a pushover notification',function (done) {
         this.timeout(4000);
-        push.send(credentials.testing.pushover_key, 'Purdue Toolkit Pushover Testing', 'TESTING: Class Available!', done);
+        push.send(credentials.testing.pushover_key, 'Purdue Toolkit Pushover Testing', 'TESTING!', done);
     });
 });
 
@@ -68,6 +68,9 @@ describe('Checker', function () {
             expect(section).to.have.property('title');
             expect(section.title).to.be.a('string');
             expect(section.title).to.equal('Operating Systems - 13032 - CS 35400 - LE1');
+            expect(section.courseTitle).to.equal('Operating Systems');
+            expect(section.sectionNumber).to.equal('LE1');
+            expect(section.courseNumber).to.equal('CS 35400');
             console.log(section);
             done();
         })
@@ -90,6 +93,16 @@ describe('Checker', function () {
             expect(err).to.have.property('message');
             done();
         })
+    })
+});
+
+describe('Watch', function () {
+    it('should be created without error', function (done) {
+        let watch = new Watch();
+        watch.term = 201810;
+        watch.crn = 13032;
+        watch.email = credentials.testing.email;
+
     })
 });
 

@@ -61,16 +61,18 @@ router.post('/',[
                             watch.crn = req.body.crn;
                             watch.term = req.body.term;
                             watch.title = section.title;
-                            let titleParts  = section.title.split(' - ');
-                            watch.courseTitle = titleParts[0].trim();
-                            watch.courseNumber = titleParts[2].trim();
-                            watch.sectionNumber = titleParts[3].trim();
+                            watch.courseTitle = section.courseTitle;
+                            watch.courseNumber = section.courseNumber;
+                            watch.sectionNumber = section.sectionNumber;
                             if(req.user)
                                 watch.user = req.user.id;
                             watch.save(function (err, watch) {
                                 if(err) res.send(err);
                                 else{
-                                    req.flash('success','You will be notified when there is space available in <strong>'+watch.title+'</strong>');
+                                    req.flash('success',
+                                        `You will be notified when there is space available in <strong>\
+                                            ${watch.courseNumber}: ${watch.courseTitle}, Section ${watch.sectionNumber}\
+                                            </strong>`);
                                     res.render('index');
                                 }
                             })
