@@ -13,6 +13,7 @@ const push = new Pushover({token:credentials.pushover.key});
 const mongoose = require('mongoose');
 const sender = require('../email-sender');
 const checker = require('../checker');
+const format = require('../util/stringFormatter');
 mongoose.Promise = require('bluebird');
 mongoose.connect(credentials.db.url,{
     useMongoClient:true
@@ -45,9 +46,7 @@ describe('User', function () {
             assert.equal(user.email, credentials.testing.email);
             user.firstName = "NewFirstName";
             user.save(function (err, user) {
-                // console.log(user);
                 if(err) done(err);
-                // user.firstName.should.equal('NewFirstName');
                 assert.equal(user.firstName, "NewFirstName");
                 done();
             })
@@ -93,6 +92,12 @@ describe('Checker', function () {
             expect(err).to.have.property('message');
             done();
         })
+    });
+
+    it('should format correctly', function () {
+        let result = format.watchSuccess({courseTitle:'testing', courseNumber:'CS 1234', sectionNumber:'001'});
+        expect(result).to.be.a('string');
+        console.log(result);
     })
 });
 

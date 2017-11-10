@@ -7,6 +7,7 @@ const forgotRoutes = require('./forgot');
 const signupRoutes = require('./signup');
 const passport = require('passport');
 const checker = require('../checker');
+const format = require('../util/stringFormatter');
 const applicationURL = process.env.URL || 'http://localhost:3000';
 const { check, validationResult } = require('express-validator/check');
 
@@ -69,10 +70,7 @@ router.post('/',[
                             watch.save(function (err, watch) {
                                 if(err) res.send(err);
                                 else{
-                                    req.flash('success',
-                                        `You will be notified when there is space available in <strong>\
-                                            ${watch.courseNumber}: ${watch.courseTitle}, Section ${watch.sectionNumber}\
-                                            </strong>`);
+                                    req.flash('success',format.watchSuccess(watch));
                                     res.render('index');
                                 }
                             })
