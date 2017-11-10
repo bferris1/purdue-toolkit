@@ -11,8 +11,8 @@ const Pushover = require('node-pushover');
 const credentials = require('../config.json');
 const push = new Pushover({token:credentials.pushover.key});
 const mongoose = require('mongoose');
-const sender = require('../email-sender');
-const checker = require('../checker');
+const sender = require('../util/email-sender');
+const checker = require('../util/checker');
 const format = require('../util/stringFormatter');
 mongoose.Promise = require('bluebird');
 mongoose.connect(credentials.db.url,{

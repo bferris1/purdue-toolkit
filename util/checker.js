@@ -1,8 +1,8 @@
 'use strict';
-const config = require('./config.json');
+const config = require('../config.json');
 const request = require('request');
 const cheerio = require('cheerio');
-const Watch = require('./models/watch');
+const Watch = require('../models/watch');
 const emailSender = require('./email-sender');
 const Pushover = require('node-pushover');
 const push = new Pushover({token:config.pushover.key});

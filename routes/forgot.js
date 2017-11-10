@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const crypto = require('crypto');
-const emailSender = require('../email-sender');
+const emailSender = require('../util/email-sender');
 
 router.get('/',function(req, res){
     if(req.user) res.redirect('/');

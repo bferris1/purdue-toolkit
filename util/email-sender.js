@@ -1,5 +1,5 @@
 'use strict';
-const config = require('./config.json');
+const config = require('../config.json');
 const sendgrid  = require('sendgrid')(config.sendgrid.key);
 const helper = require('sendgrid').mail;
 let emailSender = {};

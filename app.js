@@ -19,7 +19,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('express-flash');
 const helmet = require('helmet');
-const checker = require('./checker');
+const checker = require('./util/checker');
 const applicationURL = process.env.URL || 'http://localhost:3000';
 
 mongoose.Promise = require('bluebird');
@@ -129,8 +129,8 @@ app.use('/auth', auth);
 app.use('/', routes);
 app.use('/api', api);
 
-//check watches regularyly, as defined in configuration file
-setInterval(checker.checkWatches,60000*config.checker.interval);
+//check watches regularly, as defined in configuration file
+setInterval(checker.checkWatches, 60000 * config.checker.interval);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
