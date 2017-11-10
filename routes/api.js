@@ -7,17 +7,7 @@ var config = require('../config.json');
 
 
 
-router.param('watchID', function (req, res, next, id) {
-    Watch.findOne({_id:id},function (err, watch) {
-        if(err||!watch)
-            res.json({success:false,message:'Error finding watch with this id.'});
-        else if(watch.email!=req.decoded.email)
-            res.json({success:false, message:'You are not authorised to access this watch.'});
-        else
-            next();
 
-    })
-});
 router.post('/auth',function (req, res) {
     User.findOne({email:req.body.email}).select('name email password').exec(function (err, user) {
         if(err||!user)
@@ -77,29 +67,43 @@ router.use(function (req, res, next) {
 });
 //allow user info from active session to be used
 router.use(function (req, res, next) {
-    if(req.user&&!req.decoded)
+    if(req.user && !req.decoded)
         req.decoded = req.user;
     next();
 });
+
+router.param('watchID', function (req, res, next, id) {
+    console.log(req.decoded);
+    Watch.findOne({_id:id}, function (err, watch) {
+        if(err||!watch)
+            res.status(500).json({success:false,message:'Error finding watch with this id.'});
+        else if(watch.email !== req.decoded.email && !(watch.user && req.decoded._id.equals(watch.user)))
+            res.status(401).json({success:false, message:'You are not authorised to access this watch.'});
+        else
+            next();
+    })
+});
+
+
 router.get('/', function (req, res) {
     res.json({message:"Welcome to the api!"});
 });
 
 router.get('/watches',function (req, res) {
-    Watch.find({$or: [ { email: req.decoded.email }, { user:req.decoded.id } ]},function (err, watches) {
-        if(err)
-            res.json({success:false,message:err.message});
-        else
-            res.json(watches);
+    Watch.find({$or: [ { email: req.decoded.email }, { user:req.decoded.id } ]}).sort('-createdAt').exec(
+        function (err, watches) {
+            if(err)
+                res.json({success:false,message:err.message});
+            else
+                res.json(watches);
 
-    })
-
+        })
 });
 
 //todo:post route for adding a watch
 
 router.get('/watches/:watchID',function (req, res) {
-    Watch.findOne({_id:req.params.watchID, email:req.decoded.email},function (err, watch) {
+    Watch.findOne({_id:req.params.watchID},function (err, watch) {
         if(err)
             res.json({success:false,message:err.message});
         else
@@ -109,7 +113,7 @@ router.get('/watches/:watchID',function (req, res) {
 
 router.delete('/watches/:watchID',function (req, res) {
 
-    Watch.remove({_id:req.params.watchID, email:req.decoded.email},function (err) {
+    Watch.remove({_id:req.params.watchID},function (err) {
         if(err)
             res.json({success:false,message:err.message});
         else

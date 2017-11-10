@@ -13,9 +13,8 @@ var WatchSchema = new Schema({
     sectionNumber:String,
     emailSent:Boolean,
     isActive:{type:Boolean, default:true},
-    enteredDate:{type:Date, default: Date.now()},
     resolvedDate: Date
-});
+}, {timestamps:true});
 
 WatchSchema.pre('save',function (next) {
     //converts the term number to a human-friendly semester name and year
