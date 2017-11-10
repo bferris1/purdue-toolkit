@@ -9,10 +9,7 @@ block content
         p Creating an account allows you to view and manage your watches.
         if messages.error
             .alert.alert-danger= messages.error
-        if validationErrors
-            .alert.alert-danger
-                each error in validationErrors
-                    p= error.msg
+        include validationErrors
         form(method='POST')
             .form-group
                 label(for='email') Email Address:
@@ -21,3 +18,5 @@ block content
                 label(for = 'password') Password
                 input.form-control#password(type='password',placeholder='Password',name='password')
             button(type='submit').btn.btn-block.btn-success Register
+        p
+            a(href='/auth/google') Log In with Google
