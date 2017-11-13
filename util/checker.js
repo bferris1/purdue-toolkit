@@ -20,9 +20,9 @@ checker.getSection = function(term, crn, callback){
 
 	request('https://selfservice.mypurdue.purdue.edu/prod/bwckschd.p_disp_detail_sched?term_in='+term+'&crn_in='+crn,function (err, res, html) {
 		if(!err){
-			var $ = cheerio.load(html);
+			let $ = cheerio.load(html);
 			section.title = $('th.ddlabel').first().text();
-			var seatsRow = $('table.datadisplaytable[summary="This layout table is used to present the seating numbers."]').children('tr').eq(1);
+			let seatsRow = $('table.datadisplaytable[summary="This layout table is used to present the seating numbers."]').children('tr').eq(1);
 			section.totalSeats = seatsRow.children('td').first().text();
 			section.filledSeats = seatsRow.children('td').eq(1).text();
 			section.availableSeats = seatsRow.children('td').last().text();

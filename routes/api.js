@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var User = require('../models/user');
-var Watch = require('../models/watch');
-var jwt = require('jsonwebtoken');
-var config = require('../config.json');
+const express = require('express');
+const router = express.Router();
+const User = require('../models/user');
+const Watch = require('../models/watch');
+const jwt = require('jsonwebtoken');
+const config = require('../config.json');
 
 
 
@@ -13,11 +13,11 @@ router.post('/auth',function (req, res) {
 		if(err||!user)
 			res.json({success:false,message:'Error finding user'});
 		else if(req.body.password){
-			var validPassword = user.comparePassword(req.body.password);
+			let validPassword = user.comparePassword(req.body.password);
 			if(!validPassword)
 				res.json({success:false, message:'Invalid Password'});
 			else{
-				var token = jwt.sign({
+				let token = jwt.sign({
 					email: user.email,
 					id: user._id
 				},
@@ -44,7 +44,7 @@ router.use(function (req, res, next) {
 	if(req.user){
 		next();
 	}else {
-		var token = req.body.token || req.params.token ||req.headers['x-access-token'];
+		let token = req.body.token || req.params.token ||req.headers['x-access-token'];
 
 		if(token){
 			jwt.verify(token,config.jwt.secret,function(err, decoded){

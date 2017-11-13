@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var WatchSchema = new Schema({
+let WatchSchema = new Schema({
 	crn:{type:String, required: true},
 	email:{type:String, required:true},
 	term:{type:String, required:true},
@@ -18,9 +18,9 @@ var WatchSchema = new Schema({
 
 WatchSchema.pre('save',function (next) {
 	//converts the term number to a human-friendly semester name and year
-	var year = this.term.toString().substring(0,4);
-	var semesterNumber = this.term.toString().substring(4);
-	var semesterString;
+	let year = this.term.toString().substring(0,4);
+	let semesterNumber = this.term.toString().substring(4);
+	let semesterString;
 	switch (semesterNumber){
 	case '10':
 		semesterString = 'Fall';
