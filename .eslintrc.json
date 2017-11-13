@@ -4,6 +4,12 @@
         "node": true
     },
     "extends": "eslint:recommended",
+    "globals": {
+        "it": false,
+        "describe": false,
+        "after": false,
+        "before": false
+    },
     "rules": {
         "indent": [
             "error",
@@ -20,6 +26,7 @@
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "no-console": "off"
     }
 }
