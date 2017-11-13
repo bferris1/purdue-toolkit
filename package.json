@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "node_modules/.bin/eslint"
   },
   "dependencies": {
     "async": "^2.0.0-rc.6",
