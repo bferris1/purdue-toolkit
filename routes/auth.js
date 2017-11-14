@@ -18,7 +18,7 @@ router.get('/google',
 //   which, in this example, will redirect the user to the home page.
 router.get('/google/callback',
 	passport.authenticate('google', { failureRedirect: '/login' }),
-	function(req, res) {
+	function (req, res) {
 		res.redirect('/');
 	});
 

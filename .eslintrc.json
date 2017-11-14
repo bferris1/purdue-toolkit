@@ -28,6 +28,15 @@
             "always"
         ],
         "no-console": "off",
-        "no-var":"warn"
+        "no-var":"warn",
+        "handle-callback-err": "warn",
+        "key-spacing": "warn",
+        "no-whitespace-before-property": "error",
+        "keyword-spacing": ["warn"],
+        "space-before-function-paren": "warn",
+        "camelcase": "warn",
+        "comma-dangle": ["warn", "never"],
+        "comma-spacing": ["warn"]
+
     }
 }

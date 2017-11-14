@@ -8,14 +8,14 @@ const User = require('../models/user');
 const Watch = require('../models/watch');
 const Pushover = require('node-pushover');
 const credentials = require('../config.json');
-const push = new Pushover({token:credentials.pushover.key});
+const push = new Pushover({token: credentials.pushover.key});
 const mongoose = require('mongoose');
 const sender = require('../util/email-sender');
 const checker = require('../util/checker');
 const format = require('../util/stringFormatter');
 mongoose.Promise = require('bluebird');
-mongoose.connect(credentials.db.url,{
-	useMongoClient:true
+mongoose.connect(credentials.db.url, {
+	useMongoClient: true
 });
 
 
@@ -24,7 +24,7 @@ after(function () {
 });
 
 describe('Pushover', function () {
-	it('should successfully send a pushover notification',function (done) {
+	it('should successfully send a pushover notification', function (done) {
 		this.timeout(4000);
 		push.send(credentials.testing.pushover_key, 'Purdue Toolkit Pushover Testing', 'TESTING!', done);
 	});
@@ -39,21 +39,21 @@ describe('User', function () {
 		user.save(done);
 	});
 
-	it('should be updated successfully', function(done){
-		User.findOne({email:credentials.testing.email}, function (err, user) {
-			if(err){done(err);}
+	it('should be updated successfully', function (done){
+		User.findOne({email: credentials.testing.email}, function (err, user) {
+			if (err){done(err);}
 			assert.equal(user.email, credentials.testing.email);
 			user.firstName = 'NewFirstName';
 			user.save(function (err, user) {
-				if(err) done(err);
+				if (err) done(err);
 				assert.equal(user.firstName, 'NewFirstName');
 				done();
 			});
 		});
 	});
 
-	it('should be deleted successfully', function(done){
-		User.remove({email:credentials.testing.email}, done);
+	it('should be deleted successfully', function (done){
+		User.remove({email: credentials.testing.email}, done);
 	});
 });
 
@@ -94,7 +94,7 @@ describe('Checker', function () {
 	});
 
 	it('should format correctly', function () {
-		let result = format.watchSuccess({courseTitle:'testing', courseNumber:'CS 1234', sectionNumber:'001'});
+		let result = format.watchSuccess({courseTitle: 'testing', courseNumber: 'CS 1234', sectionNumber: '001'});
 		expect(result).to.be.a('string');
 		console.log(result);
 	});
@@ -111,9 +111,9 @@ describe('Watch', function () {
 });
 
 
-describe('Email',function () {
+describe('Email', function () {
 	this.timeout(4000);
-	it('should send without error',function (done) {
+	it('should send without error', function (done) {
 		sender.testMail(credentials.testing.email, done);
 	});
 });
