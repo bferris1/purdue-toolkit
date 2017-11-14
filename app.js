@@ -23,8 +23,8 @@ const checker = require('./util/checker');
 const applicationURL = process.env.URL || 'http://localhost:3000';
 
 mongoose.Promise = require('bluebird');
-mongoose.connect(config.db.url,{
-	useMongoClient:true
+mongoose.connect(config.db.url, {
+	useMongoClient: true
 });
 
 const routes = require('./routes/index');
@@ -39,9 +39,9 @@ app.set('view engine', 'pug');
 
 passport.use(new LocalStrategy(
 	{
-		usernameField:'email'
+		usernameField: 'email'
 	},
-	function(email, password, done) {
+	function (email, password, done) {
 		User.findOne({ email: email }).select('email password').exec(function (err, user) {
 			if (err) { return done(err); }
 			if (!user) {
@@ -61,9 +61,9 @@ passport.use(new GoogleStrategy({
 	clientSecret: config.auth.google.clientSecret,
 	callbackURL: applicationURL + '/auth/google/callback'
 },
-function(accessToken, refreshToken, profile, done) {
+function (accessToken, refreshToken, profile, done) {
 	User.findOne({
-		$or: [ { googleId: profile.id }, { email:profile.emails[0].value } ]
+		$or: [ { googleId: profile.id }, { email: profile.emails[0].value } ]
 	}, function (err, user) {
 		if (user)
 			return done (err, user);
@@ -96,12 +96,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
 	secret: config.session.secret,
 	store: new MongoStore({
-		mongooseConnection:mongoose.connection,
+		mongooseConnection: mongoose.connection,
 		autoRemove: 'native' // Default
 	}),
 	name: config.session.name,
-	saveUninitialized:false,
-	resave:false,
+	saveUninitialized: false,
+	resave: false,
 	cookie: {
 		maxAge: 7*24*60*60*1000  // 1 week in milliseconds
 	}
@@ -112,11 +112,11 @@ app.use(flash());
 
 
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
 	done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
+passport.deserializeUser(function (id, done) {
 	User.findById(id, function (err, user) {
 		done(err, user);
 	});
@@ -133,7 +133,7 @@ app.use('/api', api);
 setInterval(checker.checkWatches, 60000 * config.checker.interval);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
 	let err = new Error('Not Found');
 	err.status = 404;
 	next(err);
@@ -144,7 +144,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-	app.use(function(err, req, res) {
+	app.use(function (err, req, res) {
 		res.status(err.status || 500);
 		res.render('error', {
 			message: err.message,
@@ -155,7 +155,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res) {
+app.use(function (err, req, res) {
 	res.status(err.status || 500);
 	res.render('error', {
 		message: err.message,
