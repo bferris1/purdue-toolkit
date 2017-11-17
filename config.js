@@ -102,6 +102,12 @@ const config = convict({
 		fromName: {
 			default: 'Class Watcher'
 		}
+	},
+	auth: {
+		google: {
+			clientID: {default: ''},
+			clientSecret: {default: ''}
+		}
 	}
 });
 
