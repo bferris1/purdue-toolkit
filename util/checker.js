@@ -1,11 +1,11 @@
 'use strict';
-const config = require('../config.json');
+const config = require('../config');
 const request = require('request');
 const cheerio = require('cheerio');
 const Watch = require('../models/watch');
 const emailSender = require('./email-sender');
 const Pushover = require('node-pushover');
-const push = new Pushover({token: config.pushover.key});
+const push = new Pushover({token: config.get('pushover')});
 const async = require('async');
 let checker = {};
 

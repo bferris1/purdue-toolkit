@@ -1,10 +1,10 @@
 'use strict';
-const config = require('../config.json');
-const sendgrid  = require('sendgrid')(config.sendgrid.key);
+const config = require('../config');
+const sendgrid  = require('sendgrid')(config.get('sendgrid.key'));
 const helper = require('sendgrid').mail;
 let emailSender = {};
 const applicationURL = process.env.URL || 'http://localhost:3000';
-let fromAddress = 'watcher@'+config.hosting.domain;
+let fromAddress = 'watcher@'+config.get('hosting.domain');
 
 
 function send (message, callback) {
@@ -60,7 +60,7 @@ emailSender.testMail = function (emailAddress, callback) {
 emailSender.sendPasswordResetEmail = function (emailAddress, resetToken, callback) {
 	let resetURL = applicationURL+'/reset/'+resetToken;
 
-	let from = new helper.Email(fromAddress, config.sendgrid.fromName);
+	let from = new helper.Email(fromAddress, config.get('sendgrid.fromName'));
 	let to = new helper.Email(emailAddress);
 	let subject = 'Class Watcher Password Reset';
 	let message = new helper.Mail();
