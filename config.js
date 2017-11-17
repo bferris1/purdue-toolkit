@@ -1,4 +1,5 @@
 const convict = require('convict');
+const fs = require('fs');
 
 // Define a schema
 const config = convict({
@@ -97,7 +98,7 @@ const config = convict({
 		key: {
 			doc: 'The Sendgrid API key',
 			default: '',
-			env: 'PUSHOVER_KEY'
+			env: 'SENDGRID_KEY'
 		},
 		fromName: {
 			default: 'Class Watcher'
@@ -113,7 +114,8 @@ const config = convict({
 
 // Load environment dependent configuration
 // const env = config.get('env');
-config.loadFile('./convict-config.json');
+if (fs.existsSync('./convict-config.josn'))
+	config.loadFile('./convict-config.json');
 
 // Perform validation
 config.validate({allowed: 'strict'});
