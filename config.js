@@ -114,7 +114,7 @@ const config = convict({
 
 // Load environment dependent configuration
 // const env = config.get('env');
-if (fs.existsSync('./convict-config.josn'))
+if (fs.existsSync('./convict-config.json'))
 	config.loadFile('./convict-config.json');
 
 // Perform validation
