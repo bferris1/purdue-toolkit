@@ -1,12 +1,6 @@
 const express = require('express');
 const path = require('path');
-let config;
-try {
-	config = require('./config.json');
-} catch (error) {
-	console.error('A config.json file is required.');
-	process.exit(1);
-}
+const config = require('./config');
 // const favicon = require('serve-favicon');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
@@ -23,7 +17,7 @@ const checker = require('./util/checker');
 const applicationURL = process.env.URL || 'http://localhost:3000';
 
 mongoose.Promise = require('bluebird');
-mongoose.connect(config.db.url, {
+mongoose.connect(config.get('db.url'), {
 	useMongoClient: true,
 	reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
 	reconnectInterval: 5000 // Reconnect every 5 sec
@@ -59,8 +53,8 @@ passport.use(new LocalStrategy(
 	}
 ));
 passport.use(new GoogleStrategy({
-	clientID: config.auth.google.clientID,
-	clientSecret: config.auth.google.clientSecret,
+	clientID: config.get('auth.google.clientID'),
+	clientSecret: config.get('auth.google.clientSecret'),
 	callbackURL: applicationURL + '/auth/google/callback'
 },
 function (accessToken, refreshToken, profile, done) {
@@ -96,12 +90,12 @@ app.use(helmet());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-	secret: config.session.secret,
+	secret: config.get('session.secret'),
 	store: new MongoStore({
 		mongooseConnection: mongoose.connection,
 		autoRemove: 'native' // Default
 	}),
-	name: config.session.name,
+	name: config.get('session.name'),
 	saveUninitialized: false,
 	resave: false,
 	cookie: {
@@ -132,7 +126,7 @@ app.use('/', routes);
 app.use('/api', api);
 
 //check watches regularly, as defined in configuration file
-setInterval(checker.checkWatches, 60000 * config.checker.interval);
+setInterval(checker.checkWatches, 60000 * config.get('checkInterval'));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

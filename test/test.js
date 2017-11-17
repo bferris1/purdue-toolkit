@@ -9,8 +9,8 @@ chai.use(chaiAsPromised);
 const User = require('../models/user');
 const Watch = require('../models/watch');
 const Pushover = require('node-pushover');
-const credentials = require('../config.json');
-const push = new Pushover({token: credentials.pushover.key});
+const config = require('../config');
+const push = new Pushover({token: config.get('pushover')});
 const mongoose = require('mongoose');
 const sender = require('../util/email-sender');
 const checker = require('../util/checker');
@@ -18,7 +18,7 @@ const format = require('../util/stringFormatter');
 mongoose.Promise = require('bluebird');
 
 before(function () {
-	mongoose.connect(credentials.db.url, {
+	mongoose.connect(config.get('db.url'), {
 		useMongoClient: true
 	});
 });
@@ -30,23 +30,28 @@ after(function () {
 describe('Pushover', function () {
 	it('should successfully send a pushover notification', function (done) {
 		this.timeout(4000);
-		push.send(credentials.testing.pushover_key, 'Purdue Toolkit Pushover Testing', 'TESTING!', done);
+		push.send(config.get('testing.pushoverKey'), 'Purdue Toolkit Pushover Testing', 'TESTING!', done);
 	});
 });
 
 describe('User', function () {
+
+	let testUser = {
+		email: config.get('testing.email'),
+		password: 'asdffdsa'
+	};
+
+
 	this.timeout(1000);
 	it('should be created successfully', function (done) {
-		let user = new User();
-		user.email = credentials.testing.email;
-		user.password = credentials.testing.password;
+		let user = new User(testUser);
 		user.save(done);
 	});
 
 	it('should be updated successfully', function (done){
-		User.findOne({email: credentials.testing.email}, function (err, user) {
+		User.findOne({email: testUser.email}, function (err, user) {
 			if (err){done(err);}
-			assert.equal(user.email, credentials.testing.email);
+			assert.equal(user.email, testUser.email);
 			user.firstName = 'NewFirstName';
 			user.save(function (err, user) {
 				if (err) done(err);
@@ -57,7 +62,7 @@ describe('User', function () {
 	});
 
 	it('should be deleted successfully', function (done){
-		User.remove({email: credentials.testing.email}, done);
+		User.remove({email: testUser.email}, done);
 	});
 });
 
@@ -100,18 +105,21 @@ describe('Checker', function () {
 	it('should format correctly', function () {
 		let result = format.watchSuccess({courseTitle: 'testing', courseNumber: 'CS 1234', sectionNumber: '001'});
 		expect(result).to.be.a('string');
-		expect(result).to.equal('You will be notified when there is space available in <strong>CS 1234: testing, Section 001</strong>')
+		expect(result).to.equal('You will be notified when there is space available in <strong>CS 1234: testing, Section 001</strong>');
 		console.log(result);
 	});
 });
 
 describe('Watch', function () {
+
+	let testWatch = {
+		term: '201820',
+		crn: '13032',
+		email: config.get('testing.email')
+	};
+
 	it('should be created without error', function (done) {
-		let testWatch = {
-			term: '201820',
-			crn: '13032',
-			email: credentials.testing.email
-		};
+
 		let watch = new Watch(testWatch);
 		watch.save().then(watch => {
 			console.log(watch);
@@ -121,7 +129,7 @@ describe('Watch', function () {
 	});
 
 	it('should be deleted', function () {
-		return expect(Watch.remove({email: credentials.testing.email})).to.be.fulfilled;
+		return expect(Watch.remove({email: testWatch.email})).to.be.fulfilled;
 	});
 });
 
@@ -129,6 +137,6 @@ describe('Watch', function () {
 describe('Email', function () {
 	this.timeout(4000);
 	it('should send without error', function (done) {
-		sender.testMail(credentials.testing.email, done);
+		sender.testMail(config.get('testing.email'), done);
 	});
 });

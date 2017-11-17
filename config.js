@@ -15,7 +15,7 @@ const config = convict({
 		env: 'PORT'
 	},
 
-	checkInverval: {
+	checkInterval: {
 		doc: 'Number of minutes to wait between checking watches.',
 		format: 'int',
 		default: 7,
