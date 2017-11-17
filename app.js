@@ -26,7 +26,7 @@ mongoose.Promise = require('bluebird');
 mongoose.connect(config.db.url, {
 	useMongoClient: true,
 	reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
-	reconnectInterval: 500, // Reconnect every 500ms
+	reconnectInterval: 5000 // Reconnect every 5 sec
 });
 
 const routes = require('./routes/index');

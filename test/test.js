@@ -4,6 +4,8 @@ const chai = require('chai');
 // const server = require('../bin/www');
 const expect = chai.expect;
 const assert = require('chai').assert;
+const chaiAsPromised = require('chai-as-promised');
+chai.use(chaiAsPromised);
 const User = require('../models/user');
 const Watch = require('../models/watch');
 const Pushover = require('node-pushover');
@@ -14,10 +16,12 @@ const sender = require('../util/email-sender');
 const checker = require('../util/checker');
 const format = require('../util/stringFormatter');
 mongoose.Promise = require('bluebird');
-mongoose.connect(credentials.db.url, {
-	useMongoClient: true
-});
 
+before(function () {
+	mongoose.connect(credentials.db.url, {
+		useMongoClient: true
+	});
+});
 
 after(function () {
 	mongoose.connection.close();
@@ -96,17 +100,28 @@ describe('Checker', function () {
 	it('should format correctly', function () {
 		let result = format.watchSuccess({courseTitle: 'testing', courseNumber: 'CS 1234', sectionNumber: '001'});
 		expect(result).to.be.a('string');
+		expect(result).to.equal('You will be notified when there is space available in <strong>CS 1234: testing, Section 001</strong>')
 		console.log(result);
 	});
 });
 
 describe('Watch', function () {
 	it('should be created without error', function (done) {
-		let watch = new Watch();
-		watch.term = 201810;
-		watch.crn = 13032;
-		watch.email = credentials.testing.email;
-		done();
+		let testWatch = {
+			term: '201820',
+			crn: '13032',
+			email: credentials.testing.email
+		};
+		let watch = new Watch(testWatch);
+		watch.save().then(watch => {
+			console.log(watch);
+			expect(watch).to.include(testWatch);
+			expect(watch).to.have.property('termFriendly').which.equals('Spring 2018');
+			done();});
+	});
+
+	it('should be deleted', function () {
+		return expect(Watch.remove({email: credentials.testing.email})).to.be.fulfilled;
 	});
 });
 
