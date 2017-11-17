@@ -6,7 +6,9 @@
     "start": "node ./bin/www",
     "dev": "node_modules/.bin/nodemon bin/www",
     "test": "mocha",
-    "lint": "node_modules/.bin/eslint"
+    "lint": "node_modules/.bin/eslint",
+    "coverage": "nyc mocha",
+    "test:ci": "nyc yarn test && nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
     "async": "^2.0.0-rc.6",
@@ -39,8 +41,10 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "chai-http": "^3.0.0",
+    "coveralls": "^3.0.0",
     "eslint": "^4.11.0",
     "mocha": "^4.0.1",
-    "nodemon": "^1.12.1"
+    "nodemon": "^1.12.1",
+    "nyc": "^11.3.0"
   }
 }

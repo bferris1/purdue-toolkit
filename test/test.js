@@ -61,6 +61,14 @@ describe('User', function () {
 		});
 	});
 
+	it('should verify password', function (done) {
+		User.findOne({email: testUser.email}).select('password').exec(function (err, user) {
+			if (err){done(err);}
+			expect(user.comparePassword((testUser.password))).to.equal(true);
+			done();
+		});
+	});
+
 	it('should be deleted successfully', function (done){
 		User.remove({email: testUser.email}, done);
 	});
