@@ -22,7 +22,7 @@ checker.getSection = function (term, crn, callback){
 		if (!err){
 			let $ = cheerio.load(html);
 			section.title = $('th.ddlabel').first().text();
-			let seatsRow = $('table.datadisplaytable[summary="This layout table is used to present the seating numbers."]').children('tr').eq(1);
+			let seatsRow = $('table.datadisplaytable[summary="This layout table is used to present the seating numbers."]').find('tr').eq(1);
 			section.totalSeats = seatsRow.children('td').first().text();
 			section.filledSeats = seatsRow.children('td').eq(1).text();
 			section.availableSeats = seatsRow.children('td').last().text();
