@@ -9,9 +9,9 @@ router.get('/', function (req, res){
 	res.render('forgot');
 });
 
-//route for requesting a password reset
+// route for requesting a password reset
 router.post('/', function (req, res) {
-	//redirect if the user is logged in
+	// redirect if the user is logged in
 	if (req.user) res.redirect('/');
 	else
 	if (req.body.email&&req.body.email!=''){
@@ -29,12 +29,12 @@ router.post('/', function (req, res) {
 						res.render('error', {message: err.message, err: err});
 					}
 					user.resetToken = buff.toString('hex');
-					user.resetExpiration = Date.now()+3600000; //expires in one hour
+					user.resetExpiration = Date.now()+3600000; // expires in one hour
 					user.save(function (err, user) {
 						if (err)
 							res.send('error');
 						else {
-							//send a reset email to the user
+							// send a reset email to the user
 							emailSender.sendPasswordResetEmail(user.email, user.resetToken, function (err) {
 								if (err) {
 									console.log(err);

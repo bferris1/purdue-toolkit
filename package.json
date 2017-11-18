@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "dev": "node_modules/.bin/nodemon bin/www",
     "test": "mocha",
-    "lint": "node_modules/.bin/eslint",
+    "lint": "eslint app.js config.js util routes models bin test --fix",
     "coverage": "nyc mocha",
     "test:ci": "nyc yarn test && nyc report --reporter=text-lcov | coveralls"
   },

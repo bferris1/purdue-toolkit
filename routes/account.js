@@ -11,7 +11,7 @@ router.post('/', [
 	check('email').optional({checkFalsy: true}).isEmail().withMessage('Email address is invalid.').trim(),
 	check('password').optional({checkFalsy: true}).isLength({min: 8}).withMessage('Password must be at least 8 characters.')
 ], function (req, res) {
-	//todo: check input stuff
+	// todo: check input stuff
 	const errors = validationResult(req);
 	if (!errors.isEmpty()){
 		return res.render('account', {validationErrors: errors.array()});
@@ -30,7 +30,7 @@ router.post('/', [
 			if (req.body.pushoverKey){
 				user.pushoverKey = req.body.pushoverKey;
 			} else {
-				user.pushoverKey = null;
+				user.pushoverKey = undefined; // completely removes from database
 			}
 			user.save(function (err) {
 				if (!err){

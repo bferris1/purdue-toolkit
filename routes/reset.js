@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/user');
 
 
-//routes for resetting password
+// routes for resetting password
 router.get('/reset/:token', function (req, res) {
 	if (req.params.token&&req.params.token!=''){
 		User.findOne({resetToken: req.params.token, resetExpiration: {$gt: Date.now()}}, function (err, user) {
@@ -19,10 +19,10 @@ router.get('/reset/:token', function (req, res) {
 });
 
 router.post('/reset/:token', function (req, res){
-	//find the user if the reset token has not expired
+	// find the user if the reset token has not expired
 	User.findOne({resetToken: req.params.token, resetExpiration: {$gt: Date.now()}}, function (err, user){
 		if (!user){
-			//error message handling
+			// error message handling
 			req.flash('error', 'Password reset token is invalid or has expired.');
 			res.redirect('/forgot');
 		} else {
@@ -49,7 +49,7 @@ router.post('/reset/:token', function (req, res){
 			}
 		}
 	});
-});//routes for resetting password
+});// routes for resetting password
 router.get('/:token', function (req, res) {
 	if (req.params.token&&req.params.token!=''){
 		User.findOne({resetToken: req.params.token, resetExpiration: {$gt: Date.now()}}, function (err, user) {
@@ -65,10 +65,10 @@ router.get('/:token', function (req, res) {
 });
 
 router.post('/:token', function (req, res){
-	//find the user if the reset token has not expired
+	// find the user if the reset token has not expired
 	User.findOne({resetToken: req.params.token, resetExpiration: {$gt: Date.now()}}, function (err, user){
 		if (!user){
-			//error message handling
+			// error message handling
 			req.flash('error', 'Password reset token is invalid or has expired.');
 			res.redirect('/forgot');
 		} else {

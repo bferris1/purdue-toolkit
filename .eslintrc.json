@@ -36,7 +36,8 @@
         "space-before-function-paren": "warn",
         "camelcase": "warn",
         "comma-dangle": ["warn", "never"],
-        "comma-spacing": ["warn"]
+        "comma-spacing": ["warn"],
+        "spaced-comment": "warn"
 
     }
 }

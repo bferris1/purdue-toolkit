@@ -31,7 +31,7 @@ function send (message, callback) {
 
 
 
-//todo: error handling
+// todo: error handling
 emailSender.sendNotificationEmail = function (courseName, emailAddress, term, crn) {
 	let from = new helper.Email(fromAddress, 'Class Watcher');
 	let to = new helper.Email(emailAddress);

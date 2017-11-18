@@ -82,7 +82,7 @@ function (accessToken, refreshToken, profile, done) {
 
 
 // uncomment after placing your favicon/public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -125,7 +125,7 @@ app.use('/auth', auth);
 app.use('/', routes);
 app.use('/api', api);
 
-//check watches regularly, as defined in configuration file
+// check watches regularly, as defined in configuration file
 setInterval(checker.checkWatches, 60000 * config.get('checkInterval'));
 
 // catch 404 and forward to error handler

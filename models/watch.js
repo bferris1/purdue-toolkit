@@ -21,7 +21,7 @@ WatchSchema.pre('save', function (next) {
 	if (!this.isModified('term'))
 		return next();
 
-	//converts the term number to a human-friendly semester name and year
+	// converts the term number to a human-friendly semester name and year
 	let year = this.term.toString().substring(0, 4);
 	let semesterNumber = this.term.toString().substring(4);
 	let semesterString;

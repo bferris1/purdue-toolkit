@@ -23,7 +23,7 @@ router.post('/auth', function (req, res) {
 				},
 				config.get('jwt.secret'),
 				{
-					//expiresInMinutes: 10080
+					// expiresInMinutes: 10080
 				});
 
 				res.json({
@@ -38,7 +38,7 @@ router.post('/auth', function (req, res) {
 	});
 });
 
-//middleware for authenticating requests to the api
+// middleware for authenticating requests to the api
 router.use(function (req, res, next) {
 
 	if (req.user){
@@ -56,7 +56,7 @@ router.use(function (req, res, next) {
 				}
 			});
 		} else {
-			//no token provided
+			// no token provided
 			return res.status(403).send({
 				success: false,
 				message: 'No token provided'
@@ -65,7 +65,7 @@ router.use(function (req, res, next) {
 	}
 
 });
-//allow user info from active session to be used
+// allow user info from active session to be used
 router.use(function (req, res, next) {
 	if (req.user && !req.decoded)
 		req.decoded = req.user;
@@ -100,7 +100,7 @@ router.get('/watches', function (req, res) {
 		});
 });
 
-//todo:post route for adding a watch
+// todo:post route for adding a watch
 
 router.get('/watches/:watchID', function (req, res) {
 	Watch.findOne({_id: req.params.watchID}, function (err, watch) {

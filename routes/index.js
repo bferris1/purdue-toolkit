@@ -10,7 +10,7 @@ const checker = require('../util/checker');
 const format = require('../util/stringFormatter');
 const { check, validationResult } = require('express-validator/check');
 
-//always include the user object when rendering views
+// always include the user object when rendering views
 router.use(function (req, res, next){
 	res.locals.user = req.user;
 	next();
@@ -22,8 +22,8 @@ router.get('/', function (req, res) {
 	res.render('index');
 });
 
-//post to home page to create a new watch
-//todo: better string formatting
+// post to home page to create a new watch
+// todo: better string formatting
 router.post('/', [
 	check('email').exists().isEmail().withMessage('Email address is not valid.').trim(),
 	check('crn').isInt().withMessage('CRN is invalid'),
@@ -34,7 +34,7 @@ router.post('/', [
 		res.render('index', {validationErrors: errors.array()});
 	}
 	else {
-		//verify CRN and make sure there is no space available
+		// verify CRN and make sure there is no space available
 		console.log(req.body.crn);
 		console.log(req.body.term);
 		console.log(req.body.email);
@@ -53,7 +53,7 @@ router.post('/', [
 					req.flash('error', seatsMessage);
 					res.render('index');
 				} else {
-					//check for active duplicates
+					// check for active duplicates
 					Watch.findOne({email: req.body.email, crn: req.body.crn, term: req.body.term, isActive: true}, function (err, foundWatch) {
 						if (!foundWatch){
 							let watch = new Watch();
@@ -87,14 +87,14 @@ router.post('/', [
 
 router.use('/account', account);
 
-//route for the watches page
+// route for the watches page
 
 router.get('/watches', function (req, res) {
-	//check if user is logged in
+	// check if user is logged in
 	if (req.user){
 		res.render('watches');
 	} else {
-		//redirect to login page if not logged in
+		// redirect to login page if not logged in
 		res.redirect('/login');
 	}
 });
