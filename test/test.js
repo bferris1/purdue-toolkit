@@ -90,6 +90,23 @@ describe('Checker', function () {
 		});
 	});
 
+	it('should get correct seat numbers', function (done) {
+		checker.getSection(201810, 51232, function (err, section) {
+			if (err) done(err);
+			expect(section).to.be.an('object');
+			expect(section).to.have.property('title');
+			expect(section.title).to.be.a('string');
+			expect(section.title).to.equal('Latin Level I - 51232 - LATN 10100 - 007');
+			expect(section.courseTitle).to.equal('Latin Level I');
+			expect(section.sectionNumber).to.equal('007');
+			expect(section.courseNumber).to.equal('LATN 10100');
+			expect(section.totalSeats).to.equal('20');
+			expect(section.filledSeats).to.equal('19');
+			expect(section.availableSeats).to.equal('1');
+			done();
+		});
+	});
+
 	it('should return an error for an invalid crn', function (done) {
 		checker.getSection(201820, 1234567, function (err, section) {
 			expect(section).to.be.null;
