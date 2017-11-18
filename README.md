@@ -1,5 +1,7 @@
 # Purdue Toolkit
 [![Build Status](https://travis-ci.org/moufee/purdue-toolkit.svg?branch=develop)](https://travis-ci.org/moufee/purdue-toolkit)
+[![dependencies Status](https://david-dm.org/moufee/purdue-toolkit/status.svg)](https://david-dm.org/moufee/purdue-toolkit)
+[![devDependencies Status](https://david-dm.org/moufee/purdue-toolkit/dev-status.svg)](https://david-dm.org/moufee/purdue-toolkit?type=dev)
 
 This is a NodeJS/Express app. Currently, its only function is to watch classes for available spaces and notify users when a space opens up in the class. Additional functions are planned for the future. It is hosted at [puclass.space](http://puclass.space)
 
