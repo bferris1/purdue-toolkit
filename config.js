@@ -67,7 +67,7 @@ const config = convict({
 		url: {
 			doc: 'Database url, including username and password',
 			format: '*',
-			default: '',
+			default: 'mongodb://127.0.0.1/purdue-toolkit',
 			env: 'DB_URL',
 			sensitive: true
 		}

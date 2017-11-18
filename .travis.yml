@@ -1,5 +1,8 @@
 language: node_js
 node_js:
   - "lts/*"
+cache: yarn
+services:
+  - mongodb
 script:
   - yarn run test:ci
