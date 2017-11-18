@@ -86,7 +86,6 @@ describe('Checker', function () {
 			expect(section.courseTitle).to.equal('Operating Systems');
 			expect(section.sectionNumber).to.equal('LE1');
 			expect(section.courseNumber).to.equal('CS 35400');
-			console.log(section);
 			done();
 		});
 	});
@@ -114,7 +113,6 @@ describe('Checker', function () {
 		let result = format.watchSuccess({courseTitle: 'testing', courseNumber: 'CS 1234', sectionNumber: '001'});
 		expect(result).to.be.a('string');
 		expect(result).to.equal('You will be notified when there is space available in <strong>CS 1234: testing, Section 001</strong>');
-		console.log(result);
 	});
 });
 
@@ -130,7 +128,6 @@ describe('Watch', function () {
 
 		let watch = new Watch(testWatch);
 		watch.save().then(watch => {
-			console.log(watch);
 			expect(watch).to.include(testWatch);
 			expect(watch).to.have.property('termFriendly').which.equals('Spring 2018');
 			done();});
