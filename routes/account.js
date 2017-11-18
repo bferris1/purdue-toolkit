@@ -1,21 +1,21 @@
 const express = require('express');
 const router = express.Router();
+const { check, validationResult } = require('express-validator/check');
 
 router.get('/',function(req, res){
     if(req.user) res.render('account');
     else res.redirect('/login');
 });
 
-router.post('/', function (req, res) {
+router.post('/',[
+	check('email').optional({checkFalsy:true}).isEmail().withMessage('Email address is invalid.').trim(),
+	check('password').optional({checkFalsy:true}).isLength({min:8}).withMessage('Password must be at least 8 characters.')
+], function (req, res) {
     //todo: check input stuff
-    if(req.body.email)
-        req.checkBody('email','Email is not valid').optional().isEmail().notEmpty();
-    if(req.body.password)
-        req.checkBody('password', 'Password must be at least 8 characters.').optional().len(8, undefined);
-
-    if(req.validationErrors()){
-        res.render('account',{validationErrors:req.validationErrors()});
-    }else{
+	const errors = validationResult(req);
+	if (!errors.isEmpty()){
+		return res.render('account', {validationErrors:errors.array()});
+	} else{
         if(req.user){
             let user = req.user;
             console.log('Email:'+req.body.email);
