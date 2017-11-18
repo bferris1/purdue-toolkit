@@ -5,7 +5,7 @@ const fs = require('fs');
 const config = convict({
 	env: {
 		doc: 'The application environment.',
-		format: ['production', 'development', 'test'],
+		format: ['production', 'development', 'testing'],
 		default: 'development',
 		env: 'NODE_ENV'
 	},
