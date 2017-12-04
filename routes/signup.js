@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
-const validator = require('validator');
 const { check, validationResult } = require('express-validator/check');
 
 
@@ -23,7 +22,7 @@ router.post('/', [
 	}
 	else {
 		let user = new User();
-		user.email = validator.trim(req.body.email);
+		user.email = req.body.email.trim();
 		user.password = req.body.password;
 
 		user.save(function (err, user){
