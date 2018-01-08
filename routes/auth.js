@@ -8,7 +8,7 @@ const passport = require('passport');
 //   redirecting the user to google.com.  After authorization, Google
 //   will redirect the user back to this application at /auth/google/callback
 router.get('/google',
-    passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile']})
+	passport.authenticate('google', {scope: ['https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile']})
 );
 
 // GET /auth/google/callback
@@ -17,10 +17,10 @@ router.get('/google',
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
 router.get('/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login' }),
-    function(req, res) {
-        res.redirect('/');
-    });
+	passport.authenticate('google', { failureRedirect: '/login' }),
+	function (req, res) {
+		res.redirect('/');
+	});
 
 
 module.exports = router;
