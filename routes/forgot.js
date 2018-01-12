@@ -4,7 +4,7 @@ const User = require('../models/user');
 const crypto = require('crypto');
 const emailSender = require('../util/email-sender');
 
-router.get('/', function (req, res){
+router.get('/', function (req, res) {
 	if (req.user) res.redirect('/');
 	res.render('forgot');
 });
@@ -13,38 +13,34 @@ router.get('/', function (req, res){
 router.post('/', function (req, res) {
 	// redirect if the user is logged in
 	if (req.user) res.redirect('/');
-	else
-	if (req.body.email&&req.body.email!=''){
+	else if (req.body.email && req.body.email != '') {
 		console.log(req.body.email);
 		User.findOne({email: req.body.email}, function (err, user) {
-			if (err||!user) {
+			if (err || !user) {
 				req.flash('error', 'Email address not found');
 				res.render('forgot');
 			}
 			else {
 				crypto.randomBytes(20, function (err, buff) {
 					// store the buffer as the user's reset key
-					if (err){
+					if (err) {
 						res.status(err.status || 500);
 						res.render('error', {message: err.message, err: err});
 					}
 					user.resetToken = buff.toString('hex');
-					user.resetExpiration = Date.now()+3600000; // expires in one hour
+					user.resetExpiration = Date.now() + 3600000; // expires in one hour
 					user.save(function (err, user) {
 						if (err)
 							res.send('error');
 						else {
 							// send a reset email to the user
-							emailSender.sendPasswordResetEmail(user.email, user.resetToken, function (err) {
-								if (err) {
-									console.log(err);
-									res.status(err.status || 500);
-									res.render('error', {message: err.message, error: err});
-								}
-								else {
-									req.flash('info', 'A email has been sent with further instructions.');
-									res.render('forgot');
-								}
+							emailSender.sendPasswordResetEmail(user.email, user.resetToken).then(() => {
+								req.flash('info', 'A email has been sent with further instructions.');
+								return res.render('forgot');
+							}).catch((err) => {
+								console.log(err);
+								res.status(err.status || 500);
+								res.render('error', {message: err.message, error: err});
 							});
 
 						}

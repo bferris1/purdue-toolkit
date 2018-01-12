@@ -158,7 +158,7 @@ describe('Watch', function () {
 
 describe('Email', function () {
 	this.timeout(4000);
-	it('should send without error', function (done) {
-		sender.testMail(config.get('testing.email'), done);
+	it('should send without error', function () {
+		return expect(sender.testMail(config.get('testing.email'))).to.be.fulfilled;
 	});
 });

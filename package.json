@@ -34,7 +34,6 @@
     "pug": "^2.0.0-rc.3",
     "request": "^2.72.0",
     "request-promise": "^4.2.0",
-    "sendgrid": "^5.2.0",
     "serve-favicon": "~2.4.5"
   },
   "devDependencies": {
