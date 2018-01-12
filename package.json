@@ -11,6 +11,7 @@
     "test:ci": "nyc yarn test && nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
+    "@sendgrid/mail": "^6.1.4",
     "async": "^2.0.0-rc.6",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.0",
