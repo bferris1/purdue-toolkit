@@ -10,6 +10,9 @@
     "coverage": "nyc mocha",
     "test:ci": "nyc yarn test && nyc report --reporter=text-lcov | coveralls"
   },
+  "engines": {
+    "node": "9.x"
+  },
   "dependencies": {
     "@sendgrid/mail": "^6.1.4",
     "async": "^2.0.0-rc.6",
