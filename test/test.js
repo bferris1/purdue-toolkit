@@ -18,9 +18,7 @@ const format = require('../util/stringFormatter');
 mongoose.Promise = require('bluebird');
 
 before(function () {
-	mongoose.connect(config.get('db.url'), {
-		useMongoClient: true
-	});
+	mongoose.connect(config.get('db.url'));
 });
 
 after(function () {
