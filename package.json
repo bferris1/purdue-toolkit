@@ -1,5 +1,5 @@
 {
-  "name": "Purdue-Toolkit",
+  "name": "purdue-toolkit",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -36,8 +36,7 @@
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-rc.3",
     "request": "^2.72.0",
-    "request-promise": "^4.2.0",
-    "serve-favicon": "~2.4.5"
+    "request-promise": "^4.2.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
