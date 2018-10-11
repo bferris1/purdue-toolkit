@@ -102,6 +102,10 @@ router.get('/watches', function (req, res) {
 
 // todo:post route for adding a watch
 
+router.post('/watches', function (req, res) {
+
+})
+
 router.get('/watches/:watchID', function (req, res) {
 	Watch.findOne({_id: req.params.watchID}, function (err, watch) {
 		if (err)
