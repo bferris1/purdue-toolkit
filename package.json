@@ -8,7 +8,8 @@
     "test": "NODE_ENV=test mocha",
     "lint": "eslint app.js config.js util routes models bin test --fix",
     "coverage": "nyc mocha",
-    "test:ci": "nyc yarn test && nyc report --reporter=text-lcov | coveralls"
+    "test:ci": "nyc yarn test",
+    "coverage:ci": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.2.1",

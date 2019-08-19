@@ -6,3 +6,4 @@ services:
   - mongodb
 script:
   - yarn run test:ci
+after_success: yarn run coverage:ci
