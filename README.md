@@ -3,7 +3,9 @@
 [![dependencies Status](https://david-dm.org/bferris1/purdue-toolkit/status.svg)](https://david-dm.org/bferris1/purdue-toolkit)
 [![devDependencies Status](https://david-dm.org/bferris1/purdue-toolkit/dev-status.svg)](https://david-dm.org/bferris1/purdue-toolkit?type=dev)
 
-This is a NodeJS/Express app. Currently, its only function is to watch classes for available spaces and notify users when a space opens up in the class. Additional functions are planned for the future. It is hosted at [puclass.space](http://puclass.space)
+**This project is no longer maintained.**
+
+This is a NodeJS/Express app that watches classes for available spaces and notifies users when a space opens up in the class.
 
 ## Installation
 
